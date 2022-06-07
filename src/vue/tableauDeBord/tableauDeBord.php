@@ -2,11 +2,10 @@
     $title = "Tableau de bord";
 
     $username = $_SESSION["username"];
-    $discriminator = $_SESSION["discriminator"];
 
-    echo"Bonjour ". $username . $discriminator;
+    echo"Bonjour ". $username;
 ?>
-
+test
 
 <?php 
     $content = ob_get_clean();

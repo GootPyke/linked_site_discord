@@ -1,12 +1,3 @@
-<?php 
-    if (isset($_SESSION["username"])) {
-        $verif = true;
-        var_dump($_SESSION["username"]);
-    } else {
-        $verif = false;
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -42,13 +33,12 @@
             </ul>
 
             <?php 
-            if ($verif===true) {
+            if (isset($_SESSION["username"])) {
             ?>
             <li>
                 <a href="#">
                     <?php 
-                        echo"{$username}";
-                        var_dump($username);
+                        echo"Bonjour {$username}";
                     ?>
                     
                 </a>
@@ -57,7 +47,7 @@
             } else {
             ?>
             <li id='se-co'>
-                <a id='se-co2' href="index.php?action=connexion">
+                <a id='se-co2' href="index.php?action=connexionP1">
                     Se connecter
                 </a>
             </li>

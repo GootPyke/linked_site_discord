@@ -1,8 +1,7 @@
 /************************************/
 /*         Imports police           */
 /************************************/
-@import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Shippori+Antique+B1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed&family=Krona+One&display=swap');
 
 /************************************/
 /*        Styles généraux           */
@@ -10,14 +9,14 @@
 :root {
     /* Polices */
     --police-titre: 'Krona One', sans-serif;
-    --police-corps: 'Shippori Antique B1', sans-serif;
+    --police-corps: 'Barlow Condensed', sans-serif;
 
     /* Couleurs */
     --texte-1: #FFFFFF;
     --texte-2: #BC5F04;
     --fond-general: #2C2F33;
     --fond-bv: #5865F2;
-
+    
 }
 
 * {
@@ -25,8 +24,11 @@
     padding: 0;
 }
 
-body {
+body{
     background-color: var(--fond-general);
+    font-family: var(--police-titre);
+    color: var(--texte-1);
+    height: 100vh;
 }
 
 /************************************/
@@ -72,4 +74,25 @@ header nav ul li a {
     font-family: var(--police-titre);
     text-decoration: none;
     color: var(--texte-1);
+}
+
+#accueil{
+    height: 70%;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#p-titre{
+    text-align: center;
+    font-size: 2.5em;
+    width: 50%;
+}
+
+#p-texte{
+    width: 50%;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 10px;
 }
