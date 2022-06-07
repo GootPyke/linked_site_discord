@@ -1,11 +1,11 @@
 <?php 
     $title = "Tableau de bord";
 
-    $username = $_SESSION["username"];
+    $pseudo = $_SESSION["pseudo"];
 
-    echo"Bonjour ". $username;
+    echo"Bonjour ". $pseudo;
 ?>
-test
+ça marche !
 
 <?php 
     $content = ob_get_clean();

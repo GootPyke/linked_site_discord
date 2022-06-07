@@ -1,34 +1,6 @@
 <?php 
     function connexion1(){
-        $params = array(
-        'client_id' => OAUTH2_CLIENT_ID,
-        'redirect_uri' => 'https://localhost/projet17Rework/index.php?action=connexionP2',
-        'response_type' => 'code',
-        'scope' => 'identify guilds'
-        );
-
-        header('Location: https://discord.com/api/oauth2/authorize' . '?' . http_build_query($params));
-
-        die();
-    }
-
-    function connexion2(){
-        if(session('access_token')) {
-            $user = apiRequest($apiURLBase);
-
-            $_SESSION["username"] = $user->username;
-
-            require_once 'src/vue/tableauDeBord/tableauDeBord.php';
-            //     echo '<h3>Logged In</h3>';
-            //     echo '<h4>Welcome, ' . $user->username . '</h4>';
-            //     echo '<pre>';
-            //         print_r($user);
-            //     echo '</pre>';
-
-            // } else {
-            //     echo '<h3>Not logged in</h3>';
-            //     echo '<p><a href="?action=login">Log In</a></p>';
-        }
+        
     }
 
 

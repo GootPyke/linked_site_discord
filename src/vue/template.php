@@ -33,12 +33,12 @@
             </ul>
 
             <?php 
-            if (isset($_SESSION["username"])) {
+            if (isset($_SESSION["pseudo"])) {
             ?>
             <li>
                 <a href="#">
                     <?php 
-                        echo"Bonjour {$username}";
+                        echo"Bonjour {$_SESSION["pseudo"]}";
                     ?>
                     
                 </a>

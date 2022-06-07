@@ -40,7 +40,19 @@
                 break;
             
             case 'connexionP1':
-                connexion1();
+                $params = array(
+                    'client_id' => OAUTH2_CLIENT_ID,
+                    'redirect_uri' => 'https://localhost/projet17Rework/index.php?action=connexionP2',
+                    'response_type' => 'code',
+                    'scope' => 'identify guilds'
+                );
+
+                header('Location: https://discord.com/api/oauth2/authorize' . '?' . http_build_query($params));
+
+                die();
+                break;
+            
+            case 'connexionP2':
                 if(get('code')) {
                     $token = apiRequest($tokenURL, array(
                     "grant_type" => "authorization_code",
@@ -55,10 +67,14 @@
 
                     header('Location: ' . $_SERVER['PHP_SELF']);
                 }
-                break;
-            
-            case 'connexionP2':
-                connexion2();
+                
+                if(session('access_token')) {
+                    $user = apiRequest($apiURLBase);
+
+                    $_SESSION["pseudo"] = $user->username;
+
+                    header('Location: src/vue/tableauDeBord/tableauDeBord.php');
+                }
                 break;
 
             case 'deconnexion':
