@@ -36,11 +36,10 @@
             if (isset($_SESSION["pseudo"])) {
             ?>
             <li>
-                <a href="#">
+                <a href="index.php?action=deconnexion">
                     <?php 
                         echo"Bonjour {$_SESSION["pseudo"]}";
                     ?>
-                    
                 </a>
             </li>
             <?php 

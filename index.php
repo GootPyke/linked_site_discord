@@ -78,7 +78,15 @@
                 break;
 
             case 'deconnexion':
-                deconnexion();
+                logout($revokeURL, array(
+                    'token' => session('access_token'),
+                    'token_type_hint' => 'access_token',
+                    'client_id' => OAUTH2_CLIENT_ID,
+                    'client_secret' => OAUTH2_CLIENT_SECRET,
+                ));
+                unset($_SESSION['access_token']);
+                header('Location: ' . $_SERVER['PHP_SELF']);
+                die();
                 break;
         }
     } else {

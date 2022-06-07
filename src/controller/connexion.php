@@ -1,21 +1,4 @@
 <?php 
-    function connexion1(){
-        
-    }
-
-
-    function deconnexion(){
-        logout($revokeURL, array(
-            'token' => session('access_token'),
-            'token_type_hint' => 'access_token',
-            'client_id' => OAUTH2_CLIENT_ID,
-            'client_secret' => OAUTH2_CLIENT_SECRET,
-        ));
-        unset($_SESSION['access_token']);
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        die();
-    }
-
     // Fonctions utilisées dans d'autres fonctions
 
     function get($key, $default=NULL) {
@@ -49,16 +32,16 @@
     }
 
     function logout($url, $data=array()) {
-    $ch = curl_init($url);
-    curl_setopt_array($ch, array(
-        CURLOPT_POST => TRUE,
-        CURLOPT_RETURNTRANSFER => TRUE,
-        CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-        CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded'),
-        CURLOPT_POSTFIELDS => http_build_query($data),
-    ));
-    $response = curl_exec($ch);
-    return json_decode($response);
-}
+        $ch = curl_init($url);
+        curl_setopt_array($ch, array(
+            CURLOPT_POST => TRUE,
+            CURLOPT_RETURNTRANSFER => TRUE,
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+            CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded'),
+            CURLOPT_POSTFIELDS => http_build_query($data),
+        ));
+        $response = curl_exec($ch);
+        return json_decode($response);
+    }
 ?>
 
