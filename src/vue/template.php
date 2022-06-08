@@ -33,14 +33,17 @@
             </ul>
 
             <?php 
-            if (isset($_SESSION["pseudo"])) {
+            if (isset($_SESSION["user"])) {
             ?>
-            <li>
-                <a href="index.php?action=deconnexion">
+            <li id='li-user' onclick="window.location.href='index.php?action=deconnexion'">
+                <a id='a-user'>
                     <?php 
-                        echo"Bonjour {$_SESSION["pseudo"]}";
+                        echo '<img id="img-user" src="https://cdn.discordapp.com/avatars/'. $_SESSION["user"]->id. '/'. $_SESSION["user"]->avatar .'.gif" alt="'. $_SESSION["user"]->username.'"/>';
                     ?>
                 </a>
+                <?php 
+                    echo "<h3 id='pseudo-user'><p>" . $_SESSION["user"]->username ."</p><p>#" . $_SESSION["user"]->discriminator . "</p></h3>"; 
+                ?>
             </li>
             <?php 
             } else {

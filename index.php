@@ -1,21 +1,22 @@
 <?php 
-    session_start();
+session_start();
 
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    ini_set('max_execution_time', 300); //300 seconds = 5 minutes. In case if your CURL is slow and is loading too much (Can be IPv6 problem)
-    
-    error_reporting(E_ALL);
-    
-    define('OAUTH2_CLIENT_ID', '968151234106241034');
-    define('OAUTH2_CLIENT_SECRET', 'YrhqGeFPWUEwcYKP_3dgXJkAjQ490rzM');
-    
-    $authorizeURL = 'https://discord.com/api/oauth2/authorize';
-    $tokenURL = 'https://discord.com/api/oauth2/token';
-    $apiURLBase = 'https://discord.com/api/users/@me';
-    $revokeURL = 'https://discord.com/api/oauth2/token/revoke';
-    
-    require_once 'src/controller/connexion.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+ini_set('max_execution_time', 300); //300 seconds = 5 minutes. In case if your CURL is slow and is loading too much (Can be IPv6 problem)
+
+error_reporting(E_ALL);
+
+define('OAUTH2_CLIENT_ID', '968151234106241034');
+define('OAUTH2_CLIENT_SECRET', 'YrhqGeFPWUEwcYKP_3dgXJkAjQ490rzM');
+
+$authorizeURL = 'https://discord.com/api/oauth2/authorize';
+$tokenURL = 'https://discord.com/api/oauth2/token';
+$apiURLBase = 'https://discord.com/api/users/@me';
+$revokeURL = 'https://discord.com/api/oauth2/token/revoke';
+
+require_once 'src/controller/connexionController.php';
+
 
     function accueil(){
 
@@ -40,40 +41,40 @@
                 break;
             
             case 'connexionP1':
-                $params = array(
+                $_SESSION['params'] = array(
                     'client_id' => OAUTH2_CLIENT_ID,
-                    'redirect_uri' => 'https://localhost/projet17Rework/index.php?action=connexionP2',
+                    'redirect_uri' => 'https://localhost/projet17/index.php?action=connexionP2',
                     'response_type' => 'code',
                     'scope' => 'identify guilds'
                 );
 
-                header('Location: https://discord.com/api/oauth2/authorize' . '?' . http_build_query($params));
+                header('Location: https://discord.com/api/oauth2/authorize' . '?' . http_build_query($_SESSION['params']));
 
                 die();
                 break;
             
             case 'connexionP2':
                 if(get('code')) {
-                    $token = apiRequest($tokenURL, array(
+                    $_SESSION['token'] = apiRequest($tokenURL, array(
                     "grant_type" => "authorization_code",
                     'client_id' => OAUTH2_CLIENT_ID,
                     'client_secret' => OAUTH2_CLIENT_SECRET,
-                    'redirect_uri' => 'https://localhost/projet17Rework/index.php?action=connexionP2',
+                    'redirect_uri' => 'https://localhost/projet17/index.php?action=connexionP2',
                     'code' => get('code')
                     ));
 
-                    $logout_token = $token->access_token;
-                    $_SESSION['access_token'] = $token->access_token;
+                    $_SESSION['logout_token'] = $_SESSION['token']->access_token;
+                    $_SESSION['access_token'] = $_SESSION['token']->access_token;
 
                     header('Location: ' . $_SERVER['PHP_SELF']);
                 }
                 
                 if(session('access_token')) {
-                    $user = apiRequest($apiURLBase);
+                    $_SESSION['user'] = apiRequest($apiURLBase);
 
-                    $_SESSION["pseudo"] = $user->username;
+                    $_SESSION["pseudo"] = $_SESSION['user']->username;
 
-                    header('Location: src/vue/tableauDeBord/tableauDeBord.php');
+                    // header('Location: src/vue/tableauDeBord/tableauDeBord.php');
                 }
                 break;
 
@@ -85,6 +86,7 @@
                     'client_secret' => OAUTH2_CLIENT_SECRET,
                 ));
                 unset($_SESSION['access_token']);
+                session_destroy();
                 header('Location: ' . $_SERVER['PHP_SELF']);
                 die();
                 break;
