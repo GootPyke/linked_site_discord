@@ -16,6 +16,7 @@ $apiURLBase = 'https://discord.com/api/users/@me';
 $revokeURL = 'https://discord.com/api/oauth2/token/revoke';
 
 require_once 'src/controller/connexionController.php';
+require_once 'src/controller/actualitesController.php';
 
 
     function accueil(){
@@ -40,6 +41,9 @@ require_once 'src/controller/connexionController.php';
                 accueil();
                 break;
             
+            //***************************
+            //* Connexion               *
+            //***************************
             case 'connexionP1':
                 $_SESSION['params'] = array(
                     'client_id' => OAUTH2_CLIENT_ID,
@@ -78,6 +82,9 @@ require_once 'src/controller/connexionController.php';
                 }
                 break;
 
+            //***************************
+            //* Déconnexion             *
+            //***************************
             case 'deconnexion':
                 logout($revokeURL, array(
                     'token' => session('access_token'),
@@ -89,6 +96,26 @@ require_once 'src/controller/connexionController.php';
                 session_destroy();
                 header('Location: ' . $_SERVER['PHP_SELF']);
                 die();
+                break;
+
+            //***************************
+            //* Actualités              *
+            //***************************
+            case 'actualites':
+                showActualites();
+                break;
+            
+            case 'formulaireActu':
+                formActu();
+                break;
+
+            case 'validerActu':
+                newOrEditActu();
+                header("Location: index.php?action=actualites");
+                break;
+
+            case 'supprimerActu':
+                supprimerActu();
                 break;
         }
     } else {

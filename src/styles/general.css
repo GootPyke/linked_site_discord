@@ -1,7 +1,7 @@
 /************************************/
 /*         Imports police           */
 /************************************/
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed&family=Krona+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Joan&family=Krona+One&family=Poppins:wght@500&display=swap');
 
 /************************************/
 /*        Styles généraux           */
@@ -9,7 +9,8 @@
 :root {
     /* Polices */
     --police-titre: 'Krona One', sans-serif;
-    --police-corps: 'Barlow Condensed', sans-serif;
+    --police-corps: 'Joan', serif;
+    --police-titre-2: 'Poppins', sans-serif;
 
     /* Couleurs */
     --texte-1: #FFFFFF;
@@ -27,12 +28,11 @@
 }
 
 body{
-    display: grid;
-    grid-template-rows: 2.5fr 20fr;
     background-color: var(--fond-general);
     font-family: var(--police-titre);
     color: var(--texte-1);
     height: 100vh;
+    font-family: var(--police-corps);
 }
 
 /************************************/
@@ -123,6 +123,7 @@ header nav ul li a {
     display: flex;
     justify-content:center;
     align-items: center;
+    font-family: var(--police-titre);
 }
 
 
@@ -149,4 +150,53 @@ header nav ul li a {
     text-align: center;
     font-size: 1.2em;
     margin-top: 10px;
+}
+
+/************************************/
+/*            Actualités            */
+/************************************/
+#p-admin{
+    width: 100%;
+    display:grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 7em;
+}
+
+#p-admin h2{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#actualites{
+    display: flex;
+    height:100%;
+    padding: 0px 20px;
+}
+
+.actu{
+    width:50%;
+    padding: 0px 20px;
+}
+
+.actu h1{
+    margin-bottom: 10px;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    font-family: var(--police-titre-2);
+}
+
+.actu h5{
+    margin-bottom: 30px;
+    font-family: var(--police-titre-2);
+    color: lightgray;
+}
+
+.actu p{
+    padding: 0 3em;
+    font-size: 1.3em;
 }

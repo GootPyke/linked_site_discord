@@ -16,7 +16,7 @@
                 </li>
 
                 <li>
-                    <a href="#">Actualités</a>
+                    <a href="index.php?action=actualites">Actualités</a>
                 </li>
 
                 <li>
@@ -34,14 +34,27 @@
 
             <?php 
             if (isset($_SESSION["user"])) {
+                $gif = 'https://cdn.discordapp.com/avatars/' . $_SESSION["user"]->id . '/' . $_SESSION["user"]->avatar . '.gif';
             ?>
             <li id='li-user' onclick="window.location.href='index.php?action=deconnexion'">
+                <?php 
+                    if (strpos($gif, 'a_')) {
+                ?>
                 <a id='a-user'>
                     <?php 
-                        echo '<img id="img-user" src="https://cdn.discordapp.com/avatars/'. $_SESSION["user"]->id. '/'. $_SESSION["user"]->avatar .'.gif" alt="'. $_SESSION["user"]->username.'"/>';
+                        echo '<img id="img-user" src="https://cdn.discordapp.com/avatars/'. $_SESSION["user"]->id. '/'. $_SESSION["user"]->avatar .'.gif"/>';
                     ?>
                 </a>
                 <?php 
+                    } else {
+                ?>
+                <a id='a-user'>
+                    <?php 
+                        echo '<img id="img-user" src="https://cdn.discordapp.com/avatars/'. $_SESSION["user"]->id. '/'. $_SESSION["user"]->avatar .'.png"/>';
+                    ?>
+                </a>
+                <?php 
+                    }
                     echo "<h3 id='pseudo-user'><p>" . $_SESSION["user"]->username ."</p><p>#" . $_SESSION["user"]->discriminator . "</p></h3>"; 
                 ?>
             </li>
