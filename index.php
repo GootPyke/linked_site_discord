@@ -13,6 +13,8 @@ define('OAUTH2_CLIENT_SECRET', 'YrhqGeFPWUEwcYKP_3dgXJkAjQ490rzM');
 $authorizeURL = 'https://discord.com/api/oauth2/authorize';
 $tokenURL = 'https://discord.com/api/oauth2/token';
 $apiURLBase = 'https://discord.com/api/users/@me';
+$apiURLGuild = 'https://discord.com/api/users/@me/guilds';
+$apiURLGuildInfo = 'https://discord.com/api/users/@me/guilds/{guild.id}/member';
 $revokeURL = 'https://discord.com/api/oauth2/token/revoke';
 
 require_once 'src/controller/connexionController.php';
@@ -49,7 +51,7 @@ require_once 'src/controller/actualitesController.php';
                     'client_id' => OAUTH2_CLIENT_ID,
                     'redirect_uri' => 'https://localhost/projet17/index.php?action=connexionP2',
                     'response_type' => 'code',
-                    'scope' => 'identify guilds'
+                    'scope' => 'identify guilds guilds.members.read'
                 );
 
                 header('Location: https://discord.com/api/oauth2/authorize' . '?' . http_build_query($_SESSION['params']));
@@ -78,7 +80,9 @@ require_once 'src/controller/actualitesController.php';
 
                     $_SESSION["pseudo"] = $_SESSION['user']->username;
 
-                    // header('Location: src/vue/tableauDeBord/tableauDeBord.php');
+                    $_SESSION["guild"] = apiRequest($apiURLGuild);
+
+                    $_SESSION['guildInfo'] = apiRequest($apiURLGuildInfo);
                 }
                 break;
 

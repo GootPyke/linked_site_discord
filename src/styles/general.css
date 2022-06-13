@@ -226,7 +226,136 @@ header nav ul li a {
 
 .actu #editer{
     display: flex;
-    justify-content: space-evenly;
     align-items: center;
+    align-self: center;
+    justify-content: center;
+    background-color: #0083fd;
+    height: 50%;
+    border-radius: 5px;
+    margin-right: 5px;
+    padding: 0 5px;
+}
 
+.actu #editer img{
+    margin-left: 5px;
+}
+
+.actu #supprimer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff3c3c;
+    height: 50%;
+    align-self: center;
+    border-radius:5px;
+    margin-left: 5px;
+    padding: 0 5px;
+}
+
+.actu #supprimer img {
+    margin-left: 5px;
+}
+
+/************************************/
+/*      Formulaire actualités       */
+/************************************/
+
+.body-formActu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50em;
+}
+
+#formActuField{
+    width: 60%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-color:#BC5F04;
+}
+
+#formActuField form{
+    height:100%;
+    display: grid;
+    grid-template-rows: 1fr 5fr 1fr;
+}
+
+#formActuField form div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#formActuField form h1{
+    text-align: center;
+    font-family: var(--police-titre-2);
+    align-self: center;
+}
+
+#formActuField form label {
+    font-family: var(--police-titre-2);
+    font-size: 2em;
+}
+
+#formActuField form textarea{
+    font-family: var(--police-titre-2);
+    font-size: 1em;
+}
+
+#d1 textarea{
+    display: flex;
+    width: 30em;
+    height: 5em;
+    resize: none;
+    outline: none;
+    scrollbar-width: thin;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-color: rgb(36, 36, 36) orange;
+    padding: 0 5px;
+}
+
+#d2 textarea{
+    scrollbar-width: thin;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    resize: none;
+    width: 30em;
+    height: 8em;
+    outline: none;
+    padding: 0 5px;
+    scrollbar-color: rgb(36, 36, 36) orange;
+}
+
+#formActuField form button{
+    background-color: rgb(0, 150, 0);
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    font-family: var(--police-titre-2);
+    width: 30em;
+    height: 5em;
+    border-radius: 50px;
+}
+
+#formActuField form button p{
+    font-size: 2em;
+    color: white;
+}
+
+#formActuField form button img{
+    margin-left: 5px;
+    width: 3em;
+    height: 3em;
+}
+
+#btn-form{
+    display: flex;
+    justify-content:center;
+    align-items:center;
 }

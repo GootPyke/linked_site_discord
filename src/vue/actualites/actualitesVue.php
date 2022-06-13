@@ -24,11 +24,6 @@
 
             echo'<p>'. $actu->getTexte() .'</p>';
         ?>
-        <div class='btn-admin'>
-            <?php 
-                
-            ?>
-        </div>
     </div>     
     
 <?php 
