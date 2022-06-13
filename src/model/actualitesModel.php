@@ -56,7 +56,7 @@
         }
     }
     
-    function getActualiteById(){
+    function getActualiteById($id){
         $sql = "SELECT * FROM actualite WHERE id= :id";
         $data = "";
 
@@ -64,6 +64,8 @@
             $bdd = connexionBDD();
 
             $req = $bdd->prepare($sql);
+
+            $req->setFetchMode(PDO::FETCH_CLASS, 'Actualite');
 
             $req->bindValue(':id', $id, PDO::PARAM_INT);
 
@@ -79,7 +81,7 @@
     }
 
     function addActualite($titre, $texte, $dateCreation, $dateDerniereModification){
-        $sql = "INSERT INTO produits(titre, texte, dateCreation, dateDerniereModification) VALUES (:titre, :texte, :dateCreation, :dateDerniereModification)";
+        $sql = "INSERT INTO actualite(titre, texte, dateCreation, dateDerniereModification) VALUES (:titre, :texte, :dateCreation, :dateDerniereModification)";
 
         try {
             $bdd = connexionBDD();
@@ -90,13 +92,15 @@
             $req->bindValue(':texte', $texte, PDO::PARAM_STR);
             $req->bindValue(':dateCreation', $dateCreation, PDO::PARAM_STR);
             $req->bindValue(':dateDerniereModification', $dateDerniereModification, PDO::PARAM_STR);
+
+            $req->execute();
         } catch (PDOException $ex) {
             var_dump("Erreur lors de l'ajout d'une actualité : {$ex->getMessage()}");
         }
     }
 
-    function editActualite($id, $titre, $texte, $dateCreation, $dateDerniereModification){
-        $sql = "UPDATE actualite SET titre= :titre, texte= :texte, dateCreation= :dateCreation, dateDerniereModification= :dateDerniereModification WHERE id= :id";
+    function editActualite($id, $titre, $texte, $dateDerniereModification){
+        $sql = "UPDATE actualite SET titre= :titre, texte= :texte, dateDerniereModification= :dateDerniereModification WHERE id= :id";
 
         try {
             $bdd=connexionBDD();
@@ -106,7 +110,6 @@
             $req->bindValue('id', $id, PDO::PARAM_INT);
             $req->bindValue('titre', $titre, PDO::PARAM_STR);
             $req->bindValue('texte', $texte, PDO::PARAM_STR);
-            $req->bindValue('dateCreation', $dateCreation, PDO::PARAM_STR);
             $req->bindValue('dateDerniereModification', $dateDerniereModification, PDO::PARAM_STR);
 
             $req->execute();

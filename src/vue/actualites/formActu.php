@@ -1,5 +1,6 @@
 <?php 
     $title = $nomAction;
+    date_default_timezone_set('Europe/Paris');   
     ob_start();
 ?>
 
@@ -17,23 +18,5 @@
 
 <?php 
     $content = ob_get_clean();
-    require_once('template.php');
-
-    if (isset($_GET['id'])) {
-        $dateDerMod = new \DateTime('dateDerMod');
-        $dateDerModStr = $dateDerMod->format('Y-m-d H:i:s');
-
-        $_POST["dateDerMod"] = $dateDerModStr;
-        
-    } else {
-        $dateCreation = new \DateTime('dateCrea');
-        $dateCreationStr = $dateCreation->format('Y-m-d H:i:s');
-
-        $dateDerMod = new \DateTime('dateDerMod');
-        $dateDerModStr = $dateDerMod->format('Y-m-d H:i:s');
-
-        $_POST["dateCreation"] = $dateCreationStr;
-        $_POST["dateDerMod"] = $dateDerModStr;
-    }
-
+    require_once('src/vue/template.php');
 ?>

@@ -26,7 +26,7 @@ require_once 'src/controller/actualitesController.php';
 ?>
         <div id="accueil">
             <p id="p-titre">Le portail web pour tous les membres du serveur Discord</p>
-            <p id="p-texte">Texte d'accroche</p>
+            <p id="p-texte"></p>
         </div>
 <?php 
         $content = ob_get_clean();
@@ -116,6 +116,7 @@ require_once 'src/controller/actualitesController.php';
 
             case 'supprimerActu':
                 supprimerActu();
+                header("Location: index.php?action=actualites");
                 break;
         }
     } else {
