@@ -26,9 +26,13 @@
                 <li>
                     <a href="#">Rôles</a>
                 </li>
-
+                <?php 
+                if (isset($_SESSION["user"])){
+                    
+                }
+                ?>
                 <li>
-                    <a href="#">Modération</a>
+                    <a href="index.php?action=moderation">Modération</a>
                 </li>
             </ul>
 

@@ -176,11 +176,12 @@ header nav ul li a {
     display: flex;
     height:100%;
     padding: 0px 20px;
+    flex-wrap: wrap;
 }
 
 .actu{
     display: grid;
-    grid-template-rows: 1fr 8fr;
+    grid-template-rows: 5rem calc(100% - 5rem);
     grid-template-columns: 8fr 1.5fr 1.5fr;
     width:50%;
     padding: 0px 20px;

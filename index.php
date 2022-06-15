@@ -9,12 +9,14 @@ error_reporting(E_ALL);
 
 define('OAUTH2_CLIENT_ID', '968151234106241034');
 define('OAUTH2_CLIENT_SECRET', 'YrhqGeFPWUEwcYKP_3dgXJkAjQ490rzM');
+define('BOT_TOKEN', 'OTY4MTUxMjM0MTA2MjQxMDM0.GwmKl4.STGw8-Ye1aeJZ9MSI-CwvShg8eR1PiiqpPCmr4');
 
 $authorizeURL = 'https://discord.com/api/oauth2/authorize';
 $tokenURL = 'https://discord.com/api/oauth2/token';
 $apiURLBase = 'https://discord.com/api/users/@me';
 $apiURLGuild = 'https://discord.com/api/users/@me/guilds';
-$apiURLGuildInfo = 'https://discord.com/api/users/@me/guilds/{guild.id}/member';
+$apiURLGuildInfo = 'https://discord.com/api/users/@me/guilds/'. 705530817039827026 .'/member';
+$apiURLGuildRoles = 'https://discord.com/api/v10/guilds/'. 705530817039827026 .'/roles';
 $revokeURL = 'https://discord.com/api/oauth2/token/revoke';
 
 require_once 'src/controller/connexionController.php';
@@ -82,7 +84,11 @@ require_once 'src/controller/actualitesController.php';
 
                     $_SESSION["guild"] = apiRequest($apiURLGuild);
 
-                    $_SESSION['guildInfo'] = apiRequest($apiURLGuildInfo);
+                    $_SESSION['guildUserInfo'] = apiRequest($apiURLGuildInfo);
+
+                    $_SESSION['guildRoles'] = apiRequest2($apiURLGuildRoles);
+
+                    $_SESSION["estSurLeServeur"] = verifier();
                 }
                 break;
 
@@ -122,9 +128,15 @@ require_once 'src/controller/actualitesController.php';
                 supprimerActu();
                 header("Location: index.php?action=actualites");
                 break;
+            
+            //***************************
+            //* Modération              *
+            //***************************
+            case 'moderation':
+                
+                break;
         }
     } else {
         header('Location: index.php?action=accueil');
     }
 ?>
-
