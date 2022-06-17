@@ -15,8 +15,11 @@
     /* Couleurs */
     --texte-1: #FFFFFF;
     --texte-2: #BC5F04;
-    --fond-general: #2C2F33;
-    --fond-1: #1f2020;
+    --texte-3: #d1af76;
+    --fond-general: #1d1d1d;
+    --fond-1: #e6e6e6;
+    --fond-2: #580817;
+    --fond-3: #181818;
     --fond-bv: #5865F2;
     
 }
@@ -38,12 +41,16 @@ body{
 /************************************/
 /*       Barre de navigation        */
 /************************************/
+header{
+    height: 6.5em;
+}
+
 header nav {
     width:100%;
     height: 100%;
     display: grid;
     grid-template-columns: 10fr 3fr;
-    background-color: var(--fond-1);
+    background-color: var(--fond-2);
 }
 
 header nav ul {
@@ -88,10 +95,10 @@ header nav ul li a {
     border-radius: 20px;
     height: 3em;
     width: 80%;
-    background-color: var(--fond-bv);
+    background-color: var(--texte-3);
     font-family: var(--police-titre);
     text-decoration: none;
-    color: var(--texte-1);
+    color: var(--fond-1);
 }
 
 /* Profil */
@@ -100,7 +107,7 @@ header nav ul li a {
     justify-content:center;
     align-items:center;
     list-style: none;
-    padding: 1em;
+    padding: 1%;
     grid-column-start: 2;
     cursor: pointer;
 }
@@ -112,6 +119,7 @@ header nav ul li a {
     justify-content:center;
     align-items:center;
     margin-right: 10px;
+    border: 3px solid var(--texte-3);
 }
 
 #img-user{
@@ -124,6 +132,10 @@ header nav ul li a {
     justify-content:center;
     align-items: center;
     font-family: var(--police-titre);
+}
+
+#pseudo-user p{
+    color: var(--texte-1);
 }
 
 
@@ -359,4 +371,153 @@ header nav ul li a {
     display: flex;
     justify-content:center;
     align-items:center;
+}
+
+/************************************/
+/*      Moderation : membres        */
+/************************************/
+
+#mod-body {
+    display: grid;
+    grid-template-columns: 3fr 18fr;
+}
+
+.menu{
+    grid-column-start: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items:center;
+    background-color: var(--fond-3);
+    padding: 2em 0em;
+}
+
+.menu a{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background-color: var(--fond-general);
+    width: 100%;
+    height: 3em;
+    text-decoration: none;
+    color: var(--fond-1);
+    font-family: var(--police-titre-2);
+    margin-bottom: 1em;
+    font-size: 1.2em;
+}
+
+.membres{
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap: wrap;
+    grid-column-start: 2;
+    padding: 2em 0em;
+    background-color: var(--texte-3);
+}
+
+.membre{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: calc(100% - 68%);
+    border-radius: 20px;
+    background-color: var(--fond-general);
+    margin: 0px 0.5em 1em 0.5em;
+    padding: 0.5em;
+}
+
+.div-img{
+    grid-column-start: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em;
+}
+
+.membre p{
+    border-radius: 100px;
+    overflow: hidden;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    width: 5em;
+    height: 5em;
+}
+
+.membre p img{
+    background-image: var(--fond-general);
+    width: 5em;
+    height: 5em;
+}
+
+.div-username{
+    display: flex;
+    justify-content: center;
+    grid-column-start: 2;
+    grid-column-end: 5;
+    align-items: center;
+}
+
+.membre h1{
+    font-family: var(--police-titre);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1.2em;
+    flex-wrap: wrap;
+}
+
+.membre h1 p{
+    font-family: var(--police-titre);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1em;
+    height:10%;
+    color: #cccbcb;
+}
+
+.div-expu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+}
+
+.expulser{
+    font-family: var(--police-titre-2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: var(--fond-1);
+    background-color: #ff3c3c;
+    width: 60%;
+    height: 40%;
+    border-radius: 20px;
+}
+
+.div-ban{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 2;
+}
+
+.bannir{
+    font-family: var(--police-titre-2);
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    text-decoration: none;
+    color: var(--fond-1);
+    background-color: #cc0e0e;
+    width: 60%;
+    height: 40%;
+    border-radius: 20px;
 }

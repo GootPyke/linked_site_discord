@@ -50,14 +50,6 @@
         return json_decode($response);
     }
 
-    function verifier(){
-        if (isset($_SESSION["guildUserInfo"]->roles)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     function logout($url, $data=array()) {
         $ch = curl_init($url);
         curl_setopt_array($ch, array(

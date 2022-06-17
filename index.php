@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 
 define('OAUTH2_CLIENT_ID', '968151234106241034');
 define('OAUTH2_CLIENT_SECRET', 'YrhqGeFPWUEwcYKP_3dgXJkAjQ490rzM');
-define('BOT_TOKEN', 'OTY4MTUxMjM0MTA2MjQxMDM0.GwmKl4.STGw8-Ye1aeJZ9MSI-CwvShg8eR1PiiqpPCmr4');
+define('BOT_TOKEN', 'OTY4MTUxMjM0MTA2MjQxMDM0.GtteTa.dESuUnf-A7gbMXRO5seHKNiZF062Xy4k0UeB7s');
 
 $authorizeURL = 'https://discord.com/api/oauth2/authorize';
 $tokenURL = 'https://discord.com/api/oauth2/token';
@@ -21,6 +21,7 @@ $revokeURL = 'https://discord.com/api/oauth2/token/revoke';
 
 require_once 'src/controller/connexionController.php';
 require_once 'src/controller/actualitesController.php';
+require_once 'src/controller/moderationController.php';
 
 
     function accueil(){
@@ -88,7 +89,7 @@ require_once 'src/controller/actualitesController.php';
 
                     $_SESSION['guildRoles'] = apiRequest2($apiURLGuildRoles);
 
-                    $_SESSION["estSurLeServeur"] = verifier();
+                    $_SESSION["mod"] = verificationModeration();
                 }
                 break;
 
@@ -133,7 +134,7 @@ require_once 'src/controller/actualitesController.php';
             //* Modération              *
             //***************************
             case 'moderation':
-                
+                getMembers();
                 break;
         }
     } else {

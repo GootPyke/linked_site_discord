@@ -27,13 +27,16 @@
                     <a href="#">Rôles</a>
                 </li>
                 <?php 
-                if (isset($_SESSION["user"])){
-                    
-                }
+                if (isset($_SESSION["user"]) && isset($_SESSION["mod"])){ 
+                    if($_SESSION["mod"] === true){
                 ?>
                 <li>
                     <a href="index.php?action=moderation">Modération</a>
                 </li>
+                <?php 
+                    }
+                }
+                ?>
             </ul>
 
             <?php 
