@@ -19,13 +19,13 @@
                     <a href="index.php?action=actualites">Actualités</a>
                 </li>
 
-                <li>
+                <!-- <li>
                     <a href="#">Règlement</a>
                 </li>
 
                 <li>
                     <a href="#">Rôles</a>
-                </li>
+                </li> -->
                 <?php 
                 if (isset($_SESSION["user"]) && isset($_SESSION["mod"])){ 
                     if($_SESSION["mod"] === true){

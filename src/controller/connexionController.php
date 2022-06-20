@@ -30,15 +30,19 @@
         return json_decode($response);
     }
 
-    function apiRequest2($url, $post=FALSE, $headers=array()) {
+    function apiRequest2($url, $typeRequete='GET', $jsonParams=false, $headers=array()) {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 
         $response = curl_exec($ch);
 
-        if($post)
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+        if($typeRequete === 'POST' || $typeRequete === 'PUT' || $typeRequete === 'PATCH' || $typeRequete === 'DELETE'){
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $typeRequete);
+            if($jsonParams !== false){
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($jsonParams));
+            }
+        }
 
         $headers[] = 'Accept: application/json';
 

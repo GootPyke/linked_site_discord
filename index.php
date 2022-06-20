@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 
 define('OAUTH2_CLIENT_ID', '968151234106241034');
 define('OAUTH2_CLIENT_SECRET', 'YrhqGeFPWUEwcYKP_3dgXJkAjQ490rzM');
-define('BOT_TOKEN', 'OTY4MTUxMjM0MTA2MjQxMDM0.GtteTa.dESuUnf-A7gbMXRO5seHKNiZF062Xy4k0UeB7s');
+define('BOT_TOKEN', 'OTY4MTUxMjM0MTA2MjQxMDM0.GQIVcs.qsDWc2NkfAzvFtSGC1WuI8BZKeAAd-MEAiIQn4');
 
 $authorizeURL = 'https://discord.com/api/oauth2/authorize';
 $tokenURL = 'https://discord.com/api/oauth2/token';
@@ -134,7 +134,20 @@ require_once 'src/controller/moderationController.php';
             //* Modération              *
             //***************************
             case 'moderation':
-                getMembers();
+                if (isset($_GET["tri"])) {
+                    getMembers($_GET["tri"]);
+                } else {
+                    getMembers();
+                }
+                break;
+
+            case 'sanction':
+                sanctionner();
+                break;
+
+            case 'validerSanction':
+                validerSanction();
+                header("Location: index.php?action=moderation");
                 break;
         }
     } else {
