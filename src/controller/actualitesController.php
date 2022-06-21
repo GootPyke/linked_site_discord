@@ -1,8 +1,10 @@
 <?php 
     require_once 'src/model/actualitesModel.php';
+    require_once 'src/controller/moderationController.php';
     
     function showActualites(){
         $actualites = getAllActualites();
+        $estAdmin = verificationAdmin();
 
         require_once 'src/vue/actualites/actualitesVue.php';
     }

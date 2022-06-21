@@ -7,16 +7,17 @@ ini_set('max_execution_time', 300); //300 seconds = 5 minutes. In case if your C
 
 error_reporting(E_ALL);
 
+define('ID_SERVEUR', '705530817039827026');
 define('OAUTH2_CLIENT_ID', '968151234106241034');
 define('OAUTH2_CLIENT_SECRET', 'YrhqGeFPWUEwcYKP_3dgXJkAjQ490rzM');
-define('BOT_TOKEN', 'OTY4MTUxMjM0MTA2MjQxMDM0.GQIVcs.qsDWc2NkfAzvFtSGC1WuI8BZKeAAd-MEAiIQn4');
+define('BOT_TOKEN', 'OTY4MTUxMjM0MTA2MjQxMDM0.G4Adqs.cz9VYiQNcOCWl4lIaJLqN0N6N_Ud1YEnRGKUFM');
 
 $authorizeURL = 'https://discord.com/api/oauth2/authorize';
 $tokenURL = 'https://discord.com/api/oauth2/token';
 $apiURLBase = 'https://discord.com/api/users/@me';
 $apiURLGuild = 'https://discord.com/api/users/@me/guilds';
-$apiURLGuildInfo = 'https://discord.com/api/users/@me/guilds/'. 705530817039827026 .'/member';
-$apiURLGuildRoles = 'https://discord.com/api/v10/guilds/'. 705530817039827026 .'/roles';
+$apiURLGuildInfo = 'https://discord.com/api/users/@me/guilds/'. ID_SERVEUR .'/member';
+$apiURLGuildRoles = 'https://discord.com/api/v10/guilds/'. ID_SERVEUR .'/roles';
 $revokeURL = 'https://discord.com/api/oauth2/token/revoke';
 
 require_once 'src/controller/connexionController.php';
@@ -148,6 +149,14 @@ require_once 'src/controller/moderationController.php';
             case 'validerSanction':
                 validerSanction();
                 header("Location: index.php?action=moderation");
+                break;
+
+            case 'membresBannis':
+                if (isset($_GET["tri"])) {
+                    getBannedMembers($_GET["tri"]);
+                } else {
+                    getBannedMembers();
+                }
                 break;
         }
     } else {

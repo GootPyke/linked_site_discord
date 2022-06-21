@@ -170,34 +170,58 @@ header nav ul li a {
 /************************************/
 /*            Actualités            */
 /************************************/
-#p-admin{
+#titrePage{
+    font-family: var(--police-titre);
     width: 100%;
-    display:grid;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
-    height: 7em;
+    text-align: center;
+    padding: 1em 0;
 }
 
-#p-admin h2{
-    grid-column-start: 1;
-    grid-column-end: 4;
+#p-admin{
+    width: 100%;
+    display: flex;
+    justify-content:flex-start;
+    align-items:center;
+    height: auto;
+    padding: 1em 3em;
+}
+
+#p-admin a{
+    background-color: #0ead00;
+    color: var(--texte-1);
+    text-decoration: none;
+    border-radius: 5px;
     display: flex;
     justify-content:center;
     align-items:center;
+    font-family: var(--police-titre-2);
+    padding: 1em 2em;
 }
 
+#p-admin a img{
+    width: 2em;
+    height: 2em;
+}
+
+#p-admin a p{
+    font-size: 1.5em;
+}
 #actualites{
     display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items:center;
     height:100%;
     padding: 0px 20px;
     flex-wrap: wrap;
 }
 
 .actu{
+    margin-top: 1em;
     display: grid;
     grid-template-rows: 5rem calc(100% - 5rem);
     grid-template-columns: 8fr 1.5fr 1.5fr;
-    width:50%;
+    width:100%;
     padding: 0px 20px;
 }
 
@@ -647,3 +671,24 @@ header nav ul li a {
     border-radius: 50px;
 }
 
+/************************************/
+/*      Moderation : bannis         */
+/************************************/
+
+.div-deban {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 2;
+}
+
+.div-deban a{
+    background-color: var(--fond-bv);
+    color: var(--texte-1);
+    font-family: var(--police-titre-2);
+    text-decoration: none;
+    padding: 1em 1.5em;
+    border-radius: 20px;
+}
