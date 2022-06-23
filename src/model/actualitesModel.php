@@ -23,9 +23,11 @@
         public function setDateDerniereModification($dateDerniereModification) {$this->dateDerniereModification = $dateDerniereModification;}
     }
     
+    //Obtenir toutes les actualités en gros quoi
     function getAllActualites(){
         $sql = "SELECT * FROM actualite ORDER BY id DESC";
         $data = [];
+        setlocale(LC_TIME, 'french');
         
         try {
             $bdd = connexionBDD();
@@ -42,7 +44,6 @@
                 $dateCrea = $donnee->getDateCreation();
                 $dateDerMod = $donnee->getDateDerniereModification();
                 
-                setlocale(LC_TIME, 'french');
                 $dateCreaNew = strftime("%d %B %G à %Hh%M", strtotime($dateCrea));
                 $dateDerModNew = strftime("%d %B %G à %Hh%M", strtotime($dateDerMod));
                 
@@ -56,6 +57,7 @@
         }
     }
     
+    //Obtenir une actualité par son identifiant
     function getActualiteById($id){
         $sql = "SELECT * FROM actualite WHERE id= :id";
         $data = "";
@@ -80,6 +82,7 @@
         }
     }
 
+    //Ajouter une actualité
     function addActualite($titre, $texte, $dateCreation, $dateDerniereModification){
         $sql = "INSERT INTO actualite(titre, texte, dateCreation, dateDerniereModification) VALUES (:titre, :texte, :dateCreation, :dateDerniereModification)";
 
@@ -99,6 +102,7 @@
         }
     }
 
+    //Éditer une actualité, sans modification de la date de création
     function editActualite($id, $titre, $texte, $dateDerniereModification){
         $sql = "UPDATE actualite SET titre= :titre, texte= :texte, dateDerniereModification= :dateDerniereModification WHERE id= :id";
 
@@ -118,6 +122,7 @@
         }
     }
 
+    // Supprimer une actualité
     function deleteActualite($id){
         $sql = "DELETE FROM actualite WHERE id = :id";
 

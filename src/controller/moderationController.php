@@ -1,26 +1,40 @@
 <?php 
     require_once 'src/controller/connexionController.php';
 
+    function dataGuilds(){
+        if (session('access_token')) {
+            $_SESSION["dataGuild"] = apiRequest($_SESSION['apiURLGuild']);
+            $_SESSION["dataGuildUserInfo"] = apiRequest($_SESSION['apiURLGuildInfo']);
+            $_SESSION["dataGuildRoles"] = apiRequest2($_SESSION['apiURLGuildRoles']);
+        }
+    }
+
     function verifier(){
-        if (isset($_SESSION["guildUserInfo"]->roles)) {
+        if ((isset($_SESSION["dataGuild"]) === true) && (isset($_SESSION["dataGuildUserInfo"]) === true) && (isset($_SESSION["dataGuildRoles"]) === true)) {
             return true;
         } else {
-            return false;
+            if ($_SESSION["essai"] === true) {
+                $_SESSION["essai"] = false;
+                return false;
+            } else {
+                dataGuilds();
+                $_SESSION["essai"] = true;
+                $resultat = verifier();
+            }
         }
+        return $resultat;
     }
 
     function verificationModeration($user=false){
         if (verifier() === true) {
-            $rolesUser = $_SESSION["guildUserInfo"]->roles;
-            $rolesServer = $_SESSION["guildRoles"];
-            $moderation = false;
+            $rolesUser = $_SESSION["dataGuildUserInfo"]->roles;
+            $rolesServer = $_SESSION["dataGuildRoles"];
     
             if ($user !== false) {
-    
                 foreach ($user->roles as $role){
                     foreach ($rolesServer as $roleServer){
                         if ($role === $roleServer->id) {
-                            if ($role === "941440986595336202") {
+                            if ($role === ID_MODERATION) {
                                 return true;
                             }
                         }
@@ -32,14 +46,14 @@
                 foreach ($rolesUser as $roleUser){
                     foreach ($rolesServer as $roleServer){
                         if ($roleUser === $roleServer->id){
-                            if ($roleServer->id === "941440986595336202") {
-                                $moderation = true;
+                            if ($roleServer->id === ID_MODERATION) {
+                                return true;
                                 break 2;
                             }
                         } 
                     }
                 }
-                return $moderation;
+                return false;
             }
         } else {
             exit();
@@ -48,7 +62,7 @@
 
     function verificationAdmin(){
         if (verifier()) {
-            $guilds = $_SESSION["guild"];
+            $guilds = $_SESSION["dataGuild"];
             foreach ($guilds as $guild) {
                 if ($guild->id === ID_SERVEUR) {
                     if (isset($guild->owner) === true && $guild->owner === true) {
@@ -63,7 +77,7 @@
     }
 
     function banMember($userId, $reason){
-        $apiUrl = "https://discord.com/api/v10/guilds/" . ID_SERVEUR . "/bans/" . $userId;
+        $apiUrl = API_REFERENCE . "guilds/" . ID_SERVEUR . "/bans/" . $userId;
 
         apiRequest2($apiUrl, 'PUT', array(
             'reason' => $reason
@@ -71,19 +85,19 @@
     }
 
     function kickMember($userId){
-        $apiUrl = "https://discord.com/api/v10/guilds/" . ID_SERVEUR . "/members/" . $userId;
+        $apiUrl = API_REFERENCE . "guilds/" . ID_SERVEUR . "/members/" . $userId;
         
         apiRequest2($apiUrl, 'DELETE');
     }
 
     function debanMember($id){
-        $apiUrl = "https://discord.com/api/v10/guilds/" . ID_SERVEUR . "/bans/" . $id;
+        $apiUrl = API_REFERENCE . "guilds/" . ID_SERVEUR . "/bans/" . $id;
 
         apiRequest2($apiUrl, 'DELETE');
     }
 
     function getMemberByDiscordId($id){
-        $apiUrl = "https://discord.com/api/v10/guilds/" . ID_SERVEUR . "/members/" . $id;
+        $apiUrl = API_REFERENCE . "guilds/" . ID_SERVEUR . "/members/" . $id;
 
         $member = apiRequest2($apiUrl);
 
@@ -124,13 +138,12 @@
     }
 
     function getMembers($tri='nickname'){
-        $apiURLMembers = 'https://discord.com/api/v10/guilds/'. ID_SERVEUR .'/members?limit=1000';
+        $apiURLMembers = API_REFERENCE . 'guilds/'. ID_SERVEUR .'/members?limit=1000';
         $membres = apiRequest2($apiURLMembers);
         $realMembers = array();
         $nicknames = array();
         $discriminators = array();
         $tabTri = array();
-        $varTri = array();
 
         foreach ($membres as $membre){
             if ((isset($membre->user->bot) === false) && verificationModeration($membre) === false) {
@@ -153,7 +166,7 @@
     }
 
     function getBannedMembers($tri='nickname'){
-        $apiURLBanned = 'https://discord.com/api/v10/guilds/'. ID_SERVEUR .'/bans?limit=1000';
+        $apiURLBanned = API_REFERENCE . 'guilds/'. ID_SERVEUR .'/bans?limit=1000';
         $membresBannis = apiRequest2($apiURLBanned);
         $nicknames = array();
         $discriminators = array();

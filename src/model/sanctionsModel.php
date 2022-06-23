@@ -3,28 +3,28 @@ require_once "src/model/connexionBDDModel.php";
     
     class Sanction{
         private $id;
+        private $idDiscord;
         private $typeSanction;
         private $raison;
-        private $dateCreation;
-        private $dateDerniereModification;
+        private $dateSanction;
         
         public function getId() {return $this->id;}
         
-        public function getTitre() {return $this->titre;}
-        public function setTitre($titre) {$this->titre = $titre;}
+        public function getIdDiscord() {return $this->idDiscord;}
+        public function setIdDiscord($idDiscord) {$this->idDiscord = $idDiscord;}
         
-        public function getTexte() {return $this->texte;}
-        public function setTexte($texte) {$this->texte = $texte;}
+        public function getTypeSanction() {return $this->typeSanction;}
+        public function setTypeSanction($typeSanction) {$this->typeSanction = $typeSanction;}
         
-        public function getDateCreation() {return $this->dateCreation;}
-        public function setDateCreation($dateCreation) {$this->dateCreation = $dateCreation;}
+        public function getRaison() {return $this->raison;}
+        public function setRaison($raison) {$this->raison = $raison;}
         
-        public function getDateDerniereModification() {return $this->dateDerniereModification;}
-        public function setDateDerniereModification($dateDerniereModification) {$this->dateDerniereModification = $dateDerniereModification;}
+        public function getDateSanction() {return $this->dateSanction;}
+        public function setDateSanction($dateSanction) {$this->dateSanction = $dateSanction;}
     }
     
-    function getAllActualites(){
-        $sql = "SELECT * FROM actualite ORDER BY id DESC";
+    function getAllSanctions(){
+        $sql = "SELECT * FROM sanction ORDER BY id DESC";
         $data = [];
         
         try {
@@ -32,32 +32,28 @@ require_once "src/model/connexionBDDModel.php";
             
             $req = $bdd->prepare($sql);
             
-            $req->setFetchMode(PDO::FETCH_CLASS, 'Actualite');
+            $req->setFetchMode(PDO::FETCH_CLASS, 'Sanction');
             
             $req->execute();
             
             $data = $req->fetchAll();
             
             foreach ($data as $donnee) {
-                $dateCrea = $donnee->getDateCreation();
-                $dateDerMod = $donnee->getDateDerniereModification();
+                $dateSanction = $donnee->getDateSanction();
                 
-                setlocale(LC_TIME, 'french');
-                $dateCreaNew = strftime("%d %B %G à %Hh%M", strtotime($dateCrea));
-                $dateDerModNew = strftime("%d %B %G à %Hh%M", strtotime($dateDerMod));
+                $dateSanctionNew = strftime("%d %B %G à %Hh%M", strtotime($dateSanction));
                 
-                $donnee->setDateCreation($dateCreaNew);
-                $donnee->setDateDerniereModification($dateDerModNew);
+                $donnee->setDateSanction($dateSanctionNew);
             }
         } catch (PDOException $ex) {
-            var_dump("Erreur lors de l'obtention des actualités : {$ex->getMessage()}");
+            var_dump("Erreur lors de l'obtention des sanctions : {$ex->getMessage()}");
         } finally {
             return $data;
         }
     }
     
-    function getActualiteById($id){
-        $sql = "SELECT * FROM actualite WHERE id= :id";
+    function getSanctionById($id){
+        $sql = "SELECT * FROM sanction WHERE id= :id";
         $data = "";
 
         try {
@@ -65,7 +61,7 @@ require_once "src/model/connexionBDDModel.php";
 
             $req = $bdd->prepare($sql);
 
-            $req->setFetchMode(PDO::FETCH_CLASS, 'Actualite');
+            $req->setFetchMode(PDO::FETCH_CLASS, 'Sanction');
 
             $req->bindValue(':id', $id, PDO::PARAM_INT);
 
@@ -74,32 +70,32 @@ require_once "src/model/connexionBDDModel.php";
             $data = $req->fetch();
             
         } catch (PDOException $ex) {
-            var_dump("Erreur pour l'obtention d'une actualité par son identifiant: {$ex->getMessage()}");
+            var_dump("Erreur pour l'obtention d'une sanction par son identifiant: {$ex->getMessage()}");
         } finally {
             return $data;
         }
     }
 
-    function addActualite($titre, $texte, $dateCreation, $dateDerniereModification){
-        $sql = "INSERT INTO actualite(titre, texte, dateCreation, dateDerniereModification) VALUES (:titre, :texte, :dateCreation, :dateDerniereModification)";
+    function addSanction($idDiscord, $typeSanction, $raison, $dateSanction){
+        $sql = "INSERT INTO sanction(idDiscord, typeSanction, raison, dateSanction) VALUES (:idDiscord, :typeSanction, :raison, :dateSanction)";
 
         try {
             $bdd = connexionBDD();
 
             $req = $bdd->prepare($sql);
 
-            $req->bindValue(':titre', $titre, PDO::PARAM_STR);
-            $req->bindValue(':texte', $texte, PDO::PARAM_STR);
-            $req->bindValue(':dateCreation', $dateCreation, PDO::PARAM_STR);
-            $req->bindValue(':dateDerniereModification', $dateDerniereModification, PDO::PARAM_STR);
+            $req->bindValue(':idDiscord', $idDiscord, PDO::PARAM_STR);
+            $req->bindValue(':typeSanction', $typeSanction, PDO::PARAM_STR);
+            $req->bindValue(':raison', $raison, PDO::PARAM_STR);
+            $req->bindValue(':dateSanction', $dateSanction, PDO::PARAM_STR);
 
             $req->execute();
         } catch (PDOException $ex) {
-            var_dump("Erreur lors de l'ajout d'une actualité : {$ex->getMessage()}");
+            var_dump("Erreur lors de l'ajout d'une sanction : {$ex->getMessage()}");
         }
     }
 
-    function editActualite($id, $titre, $texte, $dateDerniereModification){
+    function editSanction($id, $idDiscord, $raison){
         $sql = "UPDATE actualite SET titre= :titre, texte= :texte, dateDerniereModification= :dateDerniereModification WHERE id= :id";
 
         try {
