@@ -6,7 +6,7 @@
         $actualites = getAllActualites();
         $estAdmin = verificationAdmin();
 
-        require_once 'src/vue/actualites/actualitesVue.php';
+        require_once 'src/view/actualites/actualitesView.php';
     }
 
     function newOrEditActu(){
@@ -36,7 +36,7 @@
             $texte = "";
         }
 
-        require_once "src/vue/actualites/formActu.php";
+        require_once "src/view/actualites/formActuView.php";
     }
 
     function supprimerActu(){

@@ -5,6 +5,7 @@
 ?>
 
 <div class='body-formActu'>
+    <a href='index.php?action=actualites' class='retour'><img src="src/images/flechegauche.svg" alt="Flèche gauche"><p>Retour</p></a>
     <fieldset id='formActuField'>
         <form action="<?= $lienActionForm ?>" method="post">
             <h1><?= $nomAction ?></h1>
@@ -30,5 +31,5 @@
 
 <?php 
     $content = ob_get_clean();
-    require_once('src/vue/template.php');
+    require_once('src/view/template.php');
 ?>

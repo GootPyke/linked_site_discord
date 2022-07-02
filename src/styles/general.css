@@ -1,7 +1,7 @@
 /************************************/
 /*         Imports police           */
 /************************************/
-@import url('https://fonts.googleapis.com/css2?family=Joan&family=Krona+One&family=Poppins:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&family=Nunito+Sans&family=Poppins:wght@500&display=swap');
 
 /************************************/
 /*        Styles généraux           */
@@ -9,18 +9,18 @@
 :root {
     /* Polices */
     --police-titre: 'Krona One', sans-serif;
-    --police-corps: 'Joan', serif;
     --police-titre-2: 'Poppins', sans-serif;
+    --police-corps: 'Nunito Sans', serif;
 
     /* Couleurs */
-    --texte-1: #FFFFFF;
-    --texte-2: #BC5F04;
-    --texte-3: #d1af76;
-    --fond-general: #1d1d1d;
-    --fond-1: #e6e6e6;
-    --fond-2: #580817;
-    --fond-3: #181818;
-    --fond-bv: #5865F2;
+    --couleur-1: #FFFFFF;
+    --couleur-2: #BC5F04;
+    --couleur-3: #d1af76;
+    --couleur-4: #292929;
+    --couleur-5: #e6e6e6;
+    --couleur-6: #64091a;
+    --couleur-7: #222222;
+    --couleur-8: #5865F2;
 
     /* Tailles */
     --body-header: calc(100% - 6.5em)   
@@ -33,9 +33,9 @@
 }
 
 body{
-    background-color: var(--fond-general);
+    background-color: var(--couleur-4);
     font-family: var(--police-titre);
-    color: var(--texte-1);
+    color: var(--couleur-1);
     height: 100vh;
     font-family: var(--police-corps);
 }
@@ -52,7 +52,7 @@ header nav {
     height: 100%;
     display: grid;
     grid-template-columns: 10fr 3fr;
-    background-color: var(--fond-2);
+    background-color: var(--couleur-7);
 }
 
 header nav ul {
@@ -74,10 +74,10 @@ header nav ul li a {
     justify-content:center;
     align-items: center;
     text-decoration: none;
-    font-family: var(--police-titre);
-    color: var(--texte-1);
+    font-family: var(--police-titre-2);
+    color: var(--couleur-1);
     height: 100%;
-    font-size: 1.25em;
+    font-size: 1.4em;
 }
 
 /* Bouton se connecter */
@@ -87,20 +87,20 @@ header nav ul li a {
     justify-content:center;
     align-items: center;
     list-style: none;
-    padding: 1em;
+    padding: 0.2em;
 }
 
 #se-co2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 20px;
-    height: 3em;
-    width: 80%;
-    background-color: var(--texte-3);
-    font-family: var(--police-titre);
+    border-radius: 40px;
+    padding: 0.5em 3em;
+    background-color: var(--couleur-6);
+    font-family: var(--police-titre-2);
     text-decoration: none;
-    color: var(--fond-1);
+    color: var(--couleur-1);
+    font-size: 1.35em;
 }
 
 /* Profil */
@@ -121,7 +121,7 @@ header nav ul li a {
     justify-content:center;
     align-items:center;
     margin-right: 10px;
-    border: 3px solid var(--texte-3);
+    border: 3px solid var(--couleur-3);
 }
 
 #img-user{
@@ -133,11 +133,12 @@ header nav ul li a {
     display: flex;
     justify-content:center;
     align-items: center;
-    font-family: var(--police-titre);
+    font-family: var(--police-titre-2);
 }
 
 #pseudo-user p{
-    color: var(--texte-1);
+    font-size: 1.4em;
+    color: var(--couleur-1);
 }
 
 
@@ -188,7 +189,7 @@ header nav ul li a {
 
 #p-admin a{
     background-color: #0ead00;
-    color: var(--texte-1);
+    color: var(--couleur-1);
     text-decoration: none;
     border-radius: 5px;
     display: flex;
@@ -211,7 +212,7 @@ header nav ul li a {
     flex-direction: column;
     justify-content: flex-start;
     align-items:center;
-    height:100%;
+    height:auto;
     padding: 0px 20px;
     flex-wrap: wrap;
 }
@@ -301,10 +302,15 @@ header nav ul li a {
 
 .body-formActu{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    flex-direction: column;
     width: 100%;
     height: var(--body-header);
+}
+
+.body-formActu a{
+    width: 100%;
 }
 
 #formActuField{
@@ -314,7 +320,7 @@ header nav ul li a {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border-color:#BC5F04;
+    border-color: var(--couleur-3);
 }
 
 #formActuField form{
@@ -355,7 +361,7 @@ header nav ul li a {
     scrollbar-width: thin;
     overflow-x: hidden;
     overflow-y: scroll;
-    scrollbar-color: rgb(197, 197, 197) var(--fond-1);
+    scrollbar-color: rgb(197, 197, 197) var(--couleur-5);
     padding: 0 5px;
 }
 
@@ -368,7 +374,7 @@ header nav ul li a {
     height: 8em;
     outline: none;
     padding: 0 5px;
-    scrollbar-color: rgb(197, 197, 197) var(--fond-1);
+    scrollbar-color: rgb(197, 197, 197) var(--couleur-5);
 }
 
 #formActuField form button{
@@ -414,8 +420,8 @@ header nav ul li a {
     flex-direction: column;
     justify-content:flex-start;
     align-items:center;
-    background-color: var(--fond-3);
-    padding: 2em 0em;
+    background-color: var(--couleur-7);
+    padding: 3em 0em;
 }
 
 
@@ -423,11 +429,11 @@ header nav ul li a {
     display:flex;
     align-items:center;
     justify-content:center;
-    background-color: var(--fond-general);
+    background-color: var(--couleur-4);
     width: 100%;
     height: 3em;
     text-decoration: none;
-    color: var(--fond-1);
+    color: var(--couleur-5);
     font-family: var(--police-titre-2);
     margin-bottom: 1em;
     font-size: 1.2em;
@@ -445,6 +451,7 @@ header nav ul li a {
     justify-content: flex-start;
     align-items:center;
     padding: 0 2em;
+    background-color:var(--couleur-7);
 }
 
 #tri p{
@@ -469,9 +476,9 @@ header nav ul li a {
     font-family: var(--police-titre-2);
     margin: 0 1em;
     text-decoration: none;
-    background-color: var(--fond-bv);
+    background-color: var(--couleur-8);
     padding: 0 2em;
-    color: var(--fond-1);
+    color: var(--couleur-5);
     border-radius: 20px;
 }
 
@@ -483,7 +490,7 @@ header nav ul li a {
     flex-wrap: wrap;
     grid-column-start: 2;
     padding: 2em 0em;
-    background-color: var(--texte-3);
+    background-color: var(--couleur-3);
 }
 
 .membre{
@@ -492,7 +499,7 @@ header nav ul li a {
     grid-template-rows: 1fr 1fr;
     width: calc(100% - 68%);
     border-radius: 20px;
-    background-color: var(--fond-general);
+    background-color: var(--couleur-4);
     margin: 0px 0.5em 1em 0.5em;
     padding: 0.5em;
 }
@@ -514,11 +521,11 @@ header nav ul li a {
     align-items:center;
     width: 100px;
     height: 100px;
-    background-color:var(--fond-general);
+    background-color:var(--couleur-4);
 }
 
 .membre p img{
-    background-image: var(--fond-general);
+    background-image: var(--couleur-4);
     width: 100px;
     height: 100px;
 }
@@ -565,11 +572,11 @@ header nav ul li a {
     justify-content: center;
     align-items: center;
     text-decoration: none;
-    color: var(--fond-1);
+    color: var(--couleur-5);
     background-color: #ff3c3c;
-    width: 60%;
+    width: 95%;
     height: 40%;
-    border-radius: 20px;
+    border-radius: 50px;
 }
 
 .div-ban{
@@ -587,11 +594,11 @@ header nav ul li a {
     justify-content:center;
     align-items: center;
     text-decoration: none;
-    color: var(--fond-1);
+    color: var(--couleur-5);
     background-color: #cc0e0e;
-    width: 60%;
+    width: 95%;
     height: 40%;
-    border-radius: 20px;
+    border-radius: 50px;
 }
 
 /************************************/
@@ -600,10 +607,15 @@ header nav ul li a {
 
 #form-sanction{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    flex-direction: column;
     width: 100%;
     height: var(--body-header);
+}
+
+#form-sanction a{
+    width: 100%;
 }
 
 #form-sanction form{
@@ -639,7 +651,7 @@ header nav ul li a {
     outline: none;
     padding: 0 5px;
     font-family: var(--police-titre-2);
-    scrollbar-color: rgb(197, 197, 197) var(--fond-1);
+    scrollbar-color: rgb(197, 197, 197) var(--couleur-5);
 }
 
 
@@ -680,15 +692,124 @@ header nav ul li a {
     justify-content: center;
     align-items: center;
     grid-column-start: 1;
-    grid-column-end: 5;
+    grid-column-end: 3;
     grid-row-start: 2;
 }
 
 .div-deban a{
-    background-color: var(--fond-bv);
-    color: var(--texte-1);
+    background-color: var(--couleur-8);
+    color: var(--couleur-1);
     font-family: var(--police-titre-2);
     text-decoration: none;
-    padding: 1em 1.5em;
-    border-radius: 20px;
+    padding: 0.8em 1.2em;
+    border-radius: 50px;
+    width: 95%;
+    text-align: center;
+    font-size: 0.95em;
+}
+
+.div-raison {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 2;
+}
+
+.div-raison a{
+    background-color: #0083fd;
+    color: var(--couleur-1);
+    font-family: var(--police-titre-2);
+    text-decoration: none;
+    padding: 0.8em 1.2em;
+    border-radius: 50px;
+    width: 95%;
+    text-align: center;
+    font-size: 0.95em;
+}
+
+/*******************************************/
+/* Page pour voir la raison du banissement */
+/*******************************************/
+.div-body-raison{
+    height: var(--body-header);
+}
+
+.retour{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-family: var(--police-titre-2);
+    padding: 0 2em;
+    margin-top: 2em;
+    text-decoration: none;
+    color: var(--couleur-1);
+    font-size: 1.4em;
+}
+
+.retour:hover{
+    text-decoration: underline;
+}
+
+.retour img{
+    filter: invert();
+    margin-right: 1em;
+}
+
+.div-body-raison div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+}
+
+.div-body-raison fieldset{
+    display: grid;
+    grid-template-rows: 1fr 2fr 1fr 1fr;
+    flex-direction: column;
+    width: 70%;
+    height: 80%;
+    border-color: #d1af76;
+}
+
+.div-body-raison fieldset div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.div-body-raison div fieldset h1{
+    font-family: var(--police-titre);
+}
+
+.div-body-raison div fieldset p {
+    font-family: var(--police-titre-2);
+    font-size: 1.7em;
+}
+
+.div-body-raison div fieldset h4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--police-titre-2);
+    font-size: 1.3em ;
+    color: #cccbcb;
+}
+
+.div-body-raison div fieldset a {
+    background-color: #5865F2;
+    font-family: var(--police-titre-2);
+    color: var(--couleur-1);
+    text-decoration: none;
+    font-size: 1.4em;
+    padding: 1em 7em;
+    border-radius: 50px;
+    width: 40%;
+    height: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

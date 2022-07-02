@@ -40,5 +40,5 @@
 </div>
 <?php 
     $content = ob_get_clean();
-    require_once 'src/vue/template.php';
+    require_once 'src/view/template.php';
 ?>

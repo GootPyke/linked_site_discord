@@ -1,4 +1,3 @@
-.git/info/exclude
 <?php 
     $valeursUtilisees = array(
         'ID_SERVEUR'            => '705530817039827026',
@@ -6,7 +5,7 @@
     );
 
     return (object) array(
-        'BOT_TOKEN'             => 'OTY4MTUxMjM0MTA2MjQxMDM0.GaMlrx.SAC3eESlpNycOjHOgTm53OIh3E5H8v_e6UDwDU',
+        'BOT_TOKEN'             => 'OTY4MTUxMjM0MTA2MjQxMDM0.G6bvyH.f0am5FbbeX7OFMqfFDFbSilaOlzvsRQSZGD6Lc',
         'OAUTH2_CLIENT_SECRET'  => 'YrhqGeFPWUEwcYKP_3dgXJkAjQ490rzM',
         'OAUTH2_CLIENT_ID'      => '968151234106241034',
 

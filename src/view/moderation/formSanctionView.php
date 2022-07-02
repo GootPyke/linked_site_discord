@@ -4,6 +4,8 @@
 ?>
 
 <div id='form-sanction'>
+    <a href='index.php?action=moderation+' class='retour'><img src="src/images/flechegauche.svg" alt="Flèche gauche"><p>Retour</p></a>
+
     <form action="<?= $lienActionForm ?>" method="post">
         <h1><?= $nomAction ?></h1>
 
@@ -25,5 +27,5 @@
 
 <?php 
     $content = ob_get_clean();
-    require_once 'src/vue/template.php';
+    require_once 'src/view/template.php';
 ?>

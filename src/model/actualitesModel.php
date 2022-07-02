@@ -27,8 +27,7 @@
     function getAllActualites(){
         $sql = "SELECT * FROM actualite ORDER BY id DESC";
         $data = [];
-        setlocale(LC_TIME, 'french');
-        
+
         try {
             $bdd = connexionBDD();
             

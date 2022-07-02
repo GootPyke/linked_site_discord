@@ -1,5 +1,6 @@
 <?php 
     require_once 'src/controller/connexionController.php';
+    require_once 'src/model/sanctionsModel.php';
 
     function dataGuilds(){
         if (session('access_token')) {
@@ -72,7 +73,7 @@
             }
             return false;
         } else {
-            exit();
+            return false;
         }
     }
 
@@ -111,7 +112,7 @@
             $nomAction = "Bannir " . $membre->user->username .'#'.$membre->user->discriminator;
             $lienActionForm = "index.php?action=validerSanction&sanction=bannir&id={$id}";
 
-            require_once 'src/vue/moderation/formSanction.php';
+            require_once 'src/view/moderation/formSanctionView.php';
         } elseif ($_GET["sanction"] === 'deban') {
             $id = $_GET["id"];
             // $membre = getMemberByDiscordId($id);
@@ -125,7 +126,6 @@
         }
 
     }
-
 
     function validerSanction(){
         if ($_GET["sanction"] === 'bannir') {
@@ -162,7 +162,7 @@
             $tabTri = $discriminators;
         }
 
-        require 'src/vue/moderation/membresVue.php';
+        require 'src/view/moderation/membresView.php';
     }
 
     function getBannedMembers($tri='nickname'){
@@ -189,8 +189,70 @@
             $tabTri = $discriminators;
         }
 
-        require 'src/vue/moderation/membresBannisVue.php';
+        require 'src/view/moderation/membresBannisView.php';
     }
 
-    
+    //Vérifie les membres bannis obtenus par l'API. S'ils sont inexistants dans la base de données, ils sont ajoutés automatiquement.
+    function verifierMembresBannis(){
+        $apiURLBanned = API_REFERENCE . 'guilds/'. ID_SERVEUR .'/bans?limit=1000';
+        $membresBannis = apiRequest2($apiURLBanned);
+        $listeSanctions = getAllSanctions();
+        //Tableau des id Discord recueillis du tableau $listeSanctions
+        $idDiscSanc = array();
+        //Date pour l'éventuelle création d'une sanction dans la BDD
+        $date = date("Y-m-d H:i:s", time());
+
+        foreach ($listeSanctions as $sanction) {
+            $idDiscSanc[] = $sanction->getIdDiscord();
+        }
+
+        foreach ($membresBannis as $membreBanni){
+            $id = $membreBanni->user->id;
+            if (array_search($id, $idDiscSanc) === false) {
+                addSanction($id, "Bannissement", $membreBanni->reason, $date);
+            }
+        }
+    }
+
+    //Obtenir un membre banni en fonction de son identifiant
+    function getBannedMemberByDiscordId($id){
+        $apiURLBanned = API_REFERENCE . 'guilds/'. ID_SERVEUR .'/bans?limit=1000';
+        $membresBannis = apiRequest2($apiURLBanned);
+        $bannedMember = "";
+
+        foreach ($membresBannis as $membreBanni) {
+            if ($membreBanni->user->id === $id) {
+                $bannedMember = $membreBanni;
+                break;
+            }
+        }
+
+        return $bannedMember;
+    }
+
+    //Voir la raison pour laquelle un membre a été banni.
+    function viewRaison(){
+        verifierMembresBannis();
+
+        $id = $_GET["id"];
+
+        $user = getBannedMemberByDiscordId($id);
+
+        $sanction = getUserLastBan($id);
+
+        require_once 'src/view/moderation/dernierBanUtilView.php';
+    }
+
+    //Afficher l'historique des membres
+    function getLastestSanctions(){
+        $sanctions = getAllSanctions();
+
+        
+
+        if ($sanctions === false) {
+            $sanctions = "Aucune sanction trouvée";
+        }
+
+        require "src/view/moderation/listeSanctionsView.php";
+    }
 ?>

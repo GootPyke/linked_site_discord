@@ -12,11 +12,11 @@
         <nav>
             <ul>
                 <li>
-                    <a href="index.php?action=accueil">Accueil</a>
+                    <a href="index.php?action=accueil">ACCUEIL</a>
                 </li>
 
                 <li>
-                    <a href="index.php?action=actualites">Actualités</a>
+                    <a href="index.php?action=actualites">ACTUALITÉS</a>
                 </li>
 
                 <!-- <li>
@@ -31,7 +31,7 @@
                     if($_SESSION["mod"] === true){
                 ?>
                 <li>
-                    <a href="index.php?action=moderation">Modération</a>
+                    <a href="index.php?action=moderation">MODÉRATION</a>
                 </li>
                 <?php 
                     }
@@ -70,7 +70,7 @@
             ?>
             <li id='se-co'>
                 <a id='se-co2' href="index.php?action=connexionP1">
-                    Se connecter
+                    SE CONNECTER
                 </a>
             </li>
             <?php 

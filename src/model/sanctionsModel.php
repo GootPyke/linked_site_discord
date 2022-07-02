@@ -23,6 +23,7 @@ require_once "src/model/connexionBDDModel.php";
         public function setDateSanction($dateSanction) {$this->dateSanction = $dateSanction;}
     }
     
+    //Obtenir toutes les sanctions pour les afficher
     function getAllSanctions(){
         $sql = "SELECT * FROM sanction ORDER BY id DESC";
         $data = [];
@@ -46,14 +47,48 @@ require_once "src/model/connexionBDDModel.php";
                 $donnee->setDateSanction($dateSanctionNew);
             }
         } catch (PDOException $ex) {
-            var_dump("Erreur lors de l'obtention des sanctions : {$ex->getMessage()}");
+            return false;
         } finally {
             return $data;
         }
     }
     
-    function getSanctionById($id){
-        $sql = "SELECT * FROM sanction WHERE id= :id";
+    //Obtenir toutes les sanctions de l'utilisateur
+    function getUserSanctionsByIdDiscord($idDiscord){
+        $sql = "SELECT * FROM sanction WHERE idDiscord= :idDiscord";
+        $data = array();
+
+        try {
+            $bdd = connexionBDD();
+
+            $req = $bdd->prepare($sql);
+
+            $req->setFetchMode(PDO::FETCH_CLASS, 'Sanction');
+
+            $req->bindValue(':idDiscord', $idDiscord, PDO::PARAM_STR);
+
+            $req->execute();
+
+            $data = $req->fetchAll();
+
+            foreach ($data as $donnee) {
+                $dateSanction = $donnee->getDateSanction();
+                
+                $dateSanctionNew = strftime("%d %B %G à %Hh%M", strtotime($dateSanction));
+                
+                $donnee->setDateSanction($dateSanctionNew);
+            }
+
+        } catch (PDOException $ex) {
+            var_dump("Erreur pour l'obtention des sanctions de l'utilisateur par son identifiant Discord : {$ex->getMessage()}");
+        } finally {
+            return $data;
+        }
+    }
+
+    //Obtenir le dernier bannissement s'il y en a un d'un utilisateur
+    function getUserLastBan($idDiscord){
+        $sql = "SELECT * FROM sanction WHERE typeSanction='Bannissement' AND idDiscord=:idDiscord LIMIT 1";
         $data = "";
 
         try {
@@ -63,14 +98,20 @@ require_once "src/model/connexionBDDModel.php";
 
             $req->setFetchMode(PDO::FETCH_CLASS, 'Sanction');
 
-            $req->bindValue(':id', $id, PDO::PARAM_INT);
+            $req->bindValue(':idDiscord', $idDiscord, PDO::PARAM_STR);
 
             $req->execute();
 
             $data = $req->fetch();
+
+            $dateSanction = $data->getDateSanction();
+                
+            $dateSanctionNew = strftime("%d %B %G à %Hh%M", strtotime($dateSanction));
+                
+            $data->setDateSanction($dateSanctionNew);
             
         } catch (PDOException $ex) {
-            var_dump("Erreur pour l'obtention d'une sanction par son identifiant: {$ex->getMessage()}");
+            var_dump("Erreur pour l'obtention du dernier bannissement de l'utilisateur par son identifiant Discord : {$ex->getMessage()}");
         } finally {
             return $data;
         }
@@ -95,27 +136,8 @@ require_once "src/model/connexionBDDModel.php";
         }
     }
 
-    function editSanction($id, $idDiscord, $raison){
-        $sql = "UPDATE actualite SET titre= :titre, texte= :texte, dateDerniereModification= :dateDerniereModification WHERE id= :id";
-
-        try {
-            $bdd=connexionBDD();
-
-            $req=$bdd->prepare($sql);
-
-            $req->bindValue('id', $id, PDO::PARAM_INT);
-            $req->bindValue('titre', $titre, PDO::PARAM_STR);
-            $req->bindValue('texte', $texte, PDO::PARAM_STR);
-            $req->bindValue('dateDerniereModification', $dateDerniereModification, PDO::PARAM_STR);
-
-            $req->execute();
-        } catch (PDOException $ex) {
-            var_dump("Erreur lors de la modification d'une actualité : {$ex->getMessage()}");
-        }
-    }
-
-    function deleteActualite($id){
-        $sql = "DELETE FROM actualite WHERE id = :id";
+    function deleteSanction($id){
+        $sql = "DELETE FROM sanction WHERE id = :id";
 
         try {
             $bdd = connexionBDD();
@@ -126,7 +148,7 @@ require_once "src/model/connexionBDDModel.php";
 
             $req->execute();
         } catch (PDOException $ex) {
-            var_dump("Erreur lors de la suppression de l'actualité : {$ex->getMessage()}");
+            var_dump("Erreur lors de la suppression d'une sanction : {$ex->getMessage()}");
         }
     }
 ?>

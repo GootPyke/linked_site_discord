@@ -55,7 +55,7 @@ require_once 'src/controller/moderationController.php';
         </div>
 <?php 
         $content = ob_get_clean();
-        require_once('src/vue/template.php');
+        require_once('src/view/template.php');
     }
 
     if(isset($_GET["action"])){
@@ -176,6 +176,15 @@ require_once 'src/controller/moderationController.php';
                 } else {
                     getBannedMembers();
                 }
+                break;
+
+            //Voir la raison du bannissement
+            case 'viewRaison':
+                viewRaison();
+                break;
+
+            //Voir l'historique des sanctions
+            case 'histoSanc':
                 break;
         }
     } else {
