@@ -41,7 +41,7 @@
 
             <?php 
             if (isset($_SESSION["user"])) {
-                $gif = 'https://cdn.discordapp.com/avatars/' . $_SESSION["user"]->id . '/' . $_SESSION["user"]->avatar . '.gif';
+                $gif = CDN_AVATAR_REFERENCE . $_SESSION["user"]->id . '/' . $_SESSION["user"]->avatar . '.gif';
             ?>
             <li id='li-user' onclick="window.location.href='index.php?action=deconnexion'">
                 <?php 
@@ -49,7 +49,7 @@
                 ?>
                 <a id='a-user'>
                     <?php 
-                        echo '<img id="img-user" src="https://cdn.discordapp.com/avatars/'. $_SESSION["user"]->id. '/'. $_SESSION["user"]->avatar .'.gif"/>';
+                        echo '<img id="img-user" src="' . CDN_AVATAR_REFERENCE . $_SESSION["user"]->id. '/'. $_SESSION["user"]->avatar .'.gif"/>';
                     ?>
                 </a>
                 <?php 
@@ -57,7 +57,7 @@
                 ?>
                 <a id='a-user'>
                     <?php 
-                        echo '<img id="img-user" src="https://cdn.discordapp.com/avatars/'. $_SESSION["user"]->id. '/'. $_SESSION["user"]->avatar .'.png"/>';
+                        echo '<img id="img-user" src="' . CDN_AVATAR_REFERENCE . $_SESSION["user"]->id. '/' . $_SESSION["user"]->avatar . '.png"/>';
                     ?>
                 </a>
                 <?php 

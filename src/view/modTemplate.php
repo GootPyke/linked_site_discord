@@ -6,7 +6,7 @@
     <div class="menu">
         <a href="index.php?action=moderation">Membres</a>
         <a href="index.php?action=membresBannis">Utilisateurs bannis</a>
-        <a href="#">Historique des sanctions</a>
+        <a href="index.php?action=histoSanc">Historique des sanctions</a>
     </div>
 
     <?= $modContent ?>

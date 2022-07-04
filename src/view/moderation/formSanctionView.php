@@ -4,7 +4,7 @@
 ?>
 
 <div id='form-sanction'>
-    <a href='index.php?action=moderation+' class='retour'><img src="src/images/flechegauche.svg" alt="Flèche gauche"><p>Retour</p></a>
+    <a href='index.php?action=moderation' class='retour'><img src="src/images/flechegauche.svg" alt="Flèche gauche"><p>Retour</p></a>
 
     <form action="<?= $lienActionForm ?>" method="post">
         <h1><?= $nomAction ?></h1>

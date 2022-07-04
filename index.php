@@ -16,6 +16,8 @@ define('ID_MODERATION', $config->ID_MODERATION);
 define('ID_SERVEUR', $config->ID_SERVEUR);
 //Lien de base de l'API Discord
 define('API_REFERENCE', $config->API_REFERENCE);
+//Lien du CDN de Discord
+define('CDN_AVATAR_REFERENCE', $config->CDN_AVATAR_REFERENCE);
 
 define('OAUTH2_CLIENT_ID', $config->OAUTH2_CLIENT_ID);
 define('OAUTH2_CLIENT_SECRET', $config->OAUTH2_CLIENT_SECRET);
@@ -155,9 +157,9 @@ require_once 'src/controller/moderationController.php';
             //***************************
             case 'moderation':
                 if (isset($_GET["tri"])) {
-                    getMembers($_GET["tri"]);
+                    displayMembers($_GET["tri"]);
                 } else {
-                    getMembers();
+                    displayMembers();
                 }
                 break;
 
@@ -172,9 +174,9 @@ require_once 'src/controller/moderationController.php';
 
             case 'membresBannis':
                 if (isset($_GET["tri"])) {
-                    getBannedMembers($_GET["tri"]);
+                    displayBannedMembers($_GET["tri"]);
                 } else {
-                    getBannedMembers();
+                    displayBannedMembers();
                 }
                 break;
 
@@ -185,6 +187,7 @@ require_once 'src/controller/moderationController.php';
 
             //Voir l'historique des sanctions
             case 'histoSanc':
+                displayLastestSanctions();
                 break;
         }
     } else {

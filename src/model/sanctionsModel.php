@@ -136,15 +136,15 @@ require_once "src/model/connexionBDDModel.php";
         }
     }
 
-    function deleteSanction($id){
-        $sql = "DELETE FROM sanction WHERE id = :id";
+    function deleteSanction($idDiscord){
+        $sql = "DELETE FROM sanction WHERE idDiscord = :idDiscord";
 
         try {
             $bdd = connexionBDD();
 
             $req = $bdd->prepare($sql);
 
-            $req->bindValue(':id', $id, PDO::PARAM_INT);
+            $req->bindValue(':id', $idDiscord, PDO::PARAM_STR);
 
             $req->execute();
         } catch (PDOException $ex) {

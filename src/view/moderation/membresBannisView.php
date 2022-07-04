@@ -27,10 +27,10 @@
         ?>
                     <div class="membre">
                         <?php 
-                        $img = 'https://cdn.discordapp.com/avatars/' . $membreBanni->user->id . '/' . $membreBanni->user->avatar . '.png';
+                        $img = CDN_AVATAR_REFERENCE . $membreBanni->user->id . '/' . $membreBanni->user->avatar . '.png';
                 
                         if (strpos($img, 'a_')) {
-                            $img = 'https://cdn.discordapp.com/avatars/' . $membreBanni->user->id . '/' . $membreBanni->user->avatar . '.gif';
+                            $img = CDN_AVATAR_REFERENCE . $membreBanni->user->id . '/' . $membreBanni->user->avatar . '.gif';
                         }
                         ?>
                         <div class='div-img'>
