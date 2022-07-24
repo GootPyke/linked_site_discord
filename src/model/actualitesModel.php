@@ -40,14 +40,17 @@
             $data = $req->fetchAll();
             
             foreach ($data as $donnee) {
-                $dateCrea = $donnee->getDateCreation();
-                $dateDerMod = $donnee->getDateDerniereModification();
+                $dateCrea = date_create_from_format('Y-m-d H:i:s', $donnee->getDateCreation());
+                $dateDerMod = date_create_from_format('Y-m-d H:i:s', $donnee->getDateDerniereModification());
                 
-                $dateCreaNew = strftime("%d %B %G à %Hh%M", strtotime($dateCrea));
-                $dateDerModNew = strftime("%d %B %G à %Hh%M", strtotime($dateDerMod));
+                $dateCreaFormatee = $dateCrea->format('d F Y \à H\hi');
+                $dateDerModFormatee = $dateDerMod->format('d F Y \à H\hi');
                 
-                $donnee->setDateCreation($dateCreaNew);
-                $donnee->setDateDerniereModification($dateDerModNew);
+                $dateCreaFormateeFinale = transformerDateEnFrancais($dateCreaFormatee);
+                $dateDerModFormateeFinale = transformerDateEnFrancais($dateDerModFormatee);
+
+                $donnee->setDateCreation($dateCreaFormateeFinale);
+                $donnee->setDateDerniereModification($dateDerModFormateeFinale);
             }
         } catch (PDOException $ex) {
             var_dump("Erreur lors de l'obtention des actualités : {$ex->getMessage()}");
@@ -73,6 +76,18 @@
             $req->execute();
 
             $data = $req->fetch();
+
+            $dateCrea = date_create_from_format('Y-m-d H:i:s', $data->getDateCreation());
+            $dateDerMod = date_create_from_format('Y-m-d H:i:s', $data->getDateDerniereModification());
+            
+            $dateCreaFormatee = $dateCrea->format('d F Y \à H\hi');
+            $dateDerModFormatee = $dateDerMod->format('d F Y \à H\hi');
+            
+            $dateCreaFormateeFinale = transformerDateEnFrancais($dateCreaFormatee);
+            $dateDerModFormateeFinale = transformerDateEnFrancais($dateDerModFormatee);
+
+            $data->setDateCreation($dateCreaFormateeFinale);
+            $data->setDateDerniereModification($dateDerModFormateeFinale);
             
         } catch (PDOException $ex) {
             var_dump("Erreur pour l'obtention d'une actualité par son identifiant: {$ex->getMessage()}");

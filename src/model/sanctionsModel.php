@@ -1,5 +1,6 @@
 <?php 
 require_once "src/model/connexionBDDModel.php";
+require_once "src/controller/dateController.php";
     
     class Sanction{
         private $id;
@@ -40,16 +41,65 @@ require_once "src/model/connexionBDDModel.php";
             $data = $req->fetchAll();
             
             foreach ($data as $donnee) {
-                $dateSanction = $donnee->getDateSanction();
-                
-                $dateSanctionNew = strftime("%d %B %G à %Hh%M", strtotime($dateSanction));
-                
-                $donnee->setDateSanction($dateSanctionNew);
+                $dateSanction = date_create_from_format('Y-m-d H:i:s', $donnee->getDateSanction());
+                $dateFormatee = $dateSanction->format('d F Y \à H\hi');
+                $dateFormateeFinale = transformerDateEnFrancais($dateFormatee);
+                $donnee->setDateSanction($dateFormateeFinale);
             }
         } catch (PDOException $ex) {
             return false;
         } finally {
             return $data;
+        }
+    }
+
+    function getSpecificSanctions($sqlParam, $debut, $fin){
+        $sql = "SELECT * FROM sanction " . $sqlParam . "LIMIT :debut, :fin";
+        $data = [];
+        
+        try {
+            $bdd = connexionBDD();
+            
+            $req = $bdd->prepare($sql);
+            
+            $req->setFetchMode(PDO::FETCH_CLASS, 'Sanction');
+
+            $req->bindValue(':debut', $debut, PDO::PARAM_INT);
+            $req->bindValue(':fin', $fin, PDO::PARAM_INT);
+            
+            $req->execute();
+            
+            $data = $req->fetchAll();
+            
+            foreach ($data as $donnee) {
+                $dateSanction = date_create_from_format('Y-m-d H:i:s', $donnee->getDateSanction());
+                $dateFormatee = $dateSanction->format('d F Y \à H\hi');
+                $dateFormateeFinale = transformerDateEnFrancais($dateFormatee);
+                $donnee->setDateSanction($dateFormateeFinale);
+            }
+        } catch (PDOException $ex) {
+            return false;
+        } finally {
+            return $data;
+        }
+    }
+
+    function requeteInfoSanctionSQL($sql){
+        $data = "";
+        
+        try {
+            $bdd = connexionBDD();
+            
+            $req = $bdd->prepare($sql);
+            
+            $req->execute();
+            
+            $data = $req->fetch();
+            
+        } catch (PDOException $ex) {
+            return false;
+        } finally {
+            return $data[0];
         }
     }
     
@@ -72,11 +122,10 @@ require_once "src/model/connexionBDDModel.php";
             $data = $req->fetchAll();
 
             foreach ($data as $donnee) {
-                $dateSanction = $donnee->getDateSanction();
-                
-                $dateSanctionNew = strftime("%d %B %G à %Hh%M", strtotime($dateSanction));
-                
-                $donnee->setDateSanction($dateSanctionNew);
+                $dateSanction = date_create_from_format('Y-m-d H:i:s', $donnee->getDateSanction());
+                $dateFormatee = $dateSanction->format('d F Y \à H\hi');
+                $dateFormateeFinale = transformerDateEnFrancais($dateFormatee);
+                $donnee->setDateSanction($dateFormateeFinale);
             }
 
         } catch (PDOException $ex) {
@@ -104,11 +153,10 @@ require_once "src/model/connexionBDDModel.php";
 
             $data = $req->fetch();
 
-            $dateSanction = $data->getDateSanction();
-                
-            $dateSanctionNew = strftime("%d %B %G à %Hh%M", strtotime($dateSanction));
-                
-            $data->setDateSanction($dateSanctionNew);
+            $dateSanction = date_create_from_format('Y-m-d H:i:s', $data->getDateSanction());
+            $dateFormatee = $dateSanction->format('d F Y \à H\hi');
+            $dateFormateeFinale = transformerDateEnFrancais($dateFormatee);
+            $data->setDateSanction($dateFormateeFinale);
             
         } catch (PDOException $ex) {
             var_dump("Erreur pour l'obtention du dernier bannissement de l'utilisateur par son identifiant Discord : {$ex->getMessage()}");

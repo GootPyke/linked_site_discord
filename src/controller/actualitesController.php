@@ -11,13 +11,19 @@
 
     function newOrEditActu(){
         if (isset($_GET['id'])) {
-            $dateDerMod = date("Y-m-d H:i:s", time());
-            editActualite($_GET['id'], $_POST['titreActu'], $_POST['texteActu'], $dateDerMod);
-        } else {
-            $dateCreation = date("Y-m-d H:i:s", time());
-            $dateDerMod = date("Y-m-d H:i:s", time());
 
-            addActualite($_POST['titreActu'], $_POST['texteActu'], $dateCreation, $dateDerMod);
+            $dateDerMod = new DateTime();
+            $dateDerModBDD = $dateDerMod->format('Y-m-d H:i:s');
+
+            editActualite($_GET['id'], $_POST['titreActu'], $_POST['texteActu'], $dateDerModBDD);
+        } else {
+            $dateCreation = new DateTime();
+            $dateCreationBDD = $dateCreation->format('Y-m-d H:i:s');
+
+            $dateDerMod = new DateTime();
+            $dateDerModBDD = $dateDerMod->format('Y-m-d H:i:s');
+
+            addActualite($_POST['titreActu'], $_POST['texteActu'], $dateCreationBDD, $dateDerModBDD);
         }
     }
 

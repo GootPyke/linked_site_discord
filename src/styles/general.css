@@ -48,7 +48,7 @@ header{
 }
 
 header nav {
-    width:100%;
+    width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: 10fr 3fr;
@@ -444,44 +444,58 @@ header nav ul li a {
     flex-direction: column;
 }
 
+#gestion{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-family: var(--police-titre-2);
+    padding: 1em 0.5em;
+}
+
 #tri{
-    width: 100%;
-    height: 3em;
     display: flex;
-    justify-content: flex-start;
-    align-items:center;
-    padding: 0 2em;
-    background-color:var(--couleur-7);
-}
-
-#tri p{
+    justify-content: center;
+    grid-column-start: 1;
+    grid-column-end: 2;
     font-family: var(--police-titre-2);
-    text-align: center;
 }
 
-#tri div{
+#tri p {
+    font-size: 1.5em;
+}
+
+#tri form select {
+    font-family: var(--police-titre-2);
+    font-size: 1.3em;
+}
+
+#tri form select option {
+    font-family: var(--police-titre-2);
+}
+
+#pages{
     display: flex;
-    justify-content: flex-start;
-    align-items:center;
-    list-style-type: none;
-    width: 60%;
+    justify-content: center;
+    align-items: center;
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
-#tri div p{
-    margin: 0 0.1em;
+#pages p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    margin: 0px 2em;
 }
 
-
-#tri div a{
-    font-family: var(--police-titre-2);
-    margin: 0 1em;
-    text-decoration: none;
-    background-color: var(--couleur-8);
-    padding: 0 2em;
-    color: var(--couleur-5);
-    border-radius: 20px;
+#pages a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--couleur-3);
+    border-radius: 5px;
+    overflow: hidden;
 }
-
 
 .membres{
     display: flex;
@@ -817,8 +831,147 @@ header nav ul li a {
 }
 
 /*******************************************/
-/*         Historique des sanction         */
+/*         Historique des sanctions        */
 /*******************************************/
+#tdb-hs{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    padding: 1em 0.5em;
+}
+
+#tdb-hs-tri{
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    font-family: var(--police-titre-2);
+}
+
+#tdb-hs-tri p{
+    font-size: 1.5em;
+}
+
+#tdb-hs-tri form select{
+    font-family: var(--police-titre-2);
+    font-size: 1.3em;
+}
+
+#tdb-hs-tri form select option{
+    font-family: var(--police-titre-2);
+}
+
+#tdb-hs-filtre{
+    font-family: var(--police-titre-2);
+    display: flex;
+    justify-content: center;
+}
+
+#tdb-hs-filtre p{
+    font-size: 1.5em;
+}
+
+#tdb-hs-filtre #filtre-div-checks{
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    margin-top: 10px;
+}
+
+#filtre-div-checks div{
+    margin-right: 1.4em;
+}
+
+.toggle-pill-color{
+    display: flex;
+}
+
+.nomSancFiltre{
+    margin-left: 5px;
+}
+
+.toggle-pill-color input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-pill-color input[type="checkbox"]+label {
+    display: block;
+    position: relative;
+    width: 3em;
+    height: 1.6em;
+    border-radius: 1em;
+    background: #e84d4d;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: background 0.1s ease-in-out;
+}
+
+.toggle-pill-color input[type="checkbox"]+label:before {
+    content: "";
+    display: block;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 1em;
+    background: #fff;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 0.2em;
+    top: 0.2em;
+    transition: all 0.2s ease-in-out;
+}
+
+.toggle-pill-color input[type="checkbox"]:checked+label {
+    background: #47cf73;
+}
+
+.toggle-pill-color input[type="checkbox"]:checked+label:before {
+    box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+    left: 1.6em;
+}
+
+#tdb-hs-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--police-titre-2);
+}
+
+#tdb-hs-page p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    margin: 0px 2em;
+}
+
+#tdb-hs-page a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:var(--couleur-3);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#tdb-hs-page a img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#tdb-hs-rech{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+
+#tdb-hs-rech form label{
+    font-family: var(--police-titre-2);
+}
+
 .sanctions{
     background-color: var(--couleur-3);
     padding: 1em 1em;

@@ -145,28 +145,100 @@
         return $membres;
     }
 
-    function displayMembers($tri='nickname'){
+    function displayMembers($tri, $page, $recherche){
         $membres = getMembers();
+        $membresFiltres = array();
         $realMembers = array();
         $nicknames = array();
         $discriminators = array();
-        $tabTri = array();
-
+        
         foreach ($membres as $membre){
             if ((isset($membre->user->bot) === false) && verificationModeration($membre) === false) {
-                $realMembers[] = $membre;
+                $membresFiltres[] = $membre;
                 $nicknames[] = $membre->user->username;
                 $discriminators[] = $membre->user->discriminator;
             }
         }
 
-        sort($nicknames, SORT_NATURAL);
-        sort($discriminators, SORT_NUMERIC);
+        $nbMembresReels = count($membresFiltres);
+        $nbMembresParPage = 10;
+        $nbPages = ceil($nbMembresReels / $nbMembresParPage);
 
-        if ($tri === 'nickname') {
-            $tabTri = $nicknames;
-        } else {
-            $tabTri = $discriminators;
+        if ($page > $nbPages || $page < 1) {
+            $page = 1;
+        }
+
+        if ($nbPages == 0) {
+            $nbPages = 1;
+        }
+
+        $debut = ($page - 1) * $nbMembresParPage;
+
+        switch ($tri) {
+            case 'pseudoAZ':
+                natcasesort($nicknames);
+                $nicknames = array_values($nicknames);
+                $tableauDeTri = $nicknames;
+                $nomCurrentTri = "De A à Z";
+                break;
+
+            case 'pseudoZA':
+                natcasesort($nicknames);
+                $nicknames = array_values($nicknames);
+                $nicknames = array_reverse($nicknames);
+                $tableauDeTri = $nicknames;
+                $nomCurrentTri = "De Z à A";
+                break;
+
+            case 'discrimCroi':
+                sort($discriminators, SORT_NUMERIC);
+                $discriminators = array_values($discriminators);
+                $tableauDeTri = $discriminators;
+                $nomCurrentTri = "Discriminateur croissant";
+                break;
+
+            case 'discrimDecroi':
+                sort($discriminators, SORT_NUMERIC);
+                $discriminators = array_values($discriminators);
+                $discriminators = array_reverse($discriminators);
+                $tableauDeTri = $discriminators;
+                $nomCurrentTri = "Discriminateur décroissant";
+                break;
+        }
+        
+        $tableauDeTri = array_slice($tableauDeTri, $debut, $nbMembresParPage);
+        $compteur = 0;
+        
+        foreach ($tableauDeTri as $valeur){
+            if ($compteur === $nbMembresParPage) {
+                break;
+            }
+
+            foreach ($membresFiltres as $membreFiltre){
+                switch ($tri) {
+                    case 'pseudoAZ':
+                        $tabKey = $membreFiltre->user->username;
+                        break;
+        
+                    case 'pseudoZA':
+                        $tabKey = $membreFiltre->user->username;
+                        break;
+        
+                    case 'discrimCroi':
+                        $tabKey = $membreFiltre->user->discriminator;
+                        break;
+        
+                    case 'discrimDecroi':
+                        $tabKey = $membreFiltre->user->discriminator;
+                        break;
+                }
+    
+                if ($tabKey === $valeur) {
+                    $realMembers[] = $membreFiltre;
+                    $compteur++;
+                }
+                
+            }
         }
 
         require 'src/view/moderation/membresView.php';
@@ -181,28 +253,99 @@
         return $membresBannis;
     }
 
-    function displayBannedMembers($tri='nickname'){
+    function displayBannedMembers($tri, $page, $recherche){
         verifierMembresBannis();
-        $membresBannis = getBannedMembers();
+        $bannedMembers = getBannedMembers();
+        $membresBannis = array();
         $nicknames = array();
         $discriminators = array();
-        $tabTri = array();
-        $varTri = array();
 
-        foreach ($membresBannis as $membreBanni){
-            if ((isset($membreBanni->user->bot) === false)) {
-                $nicknames[] = $membreBanni->user->username;
-                $discriminators[] = $membreBanni->user->discriminator;
+        foreach ($bannedMembers as $bannedMember){
+            if ((isset($bannedMember->user->bot) === false)) {
+                $nicknames[] = $bannedMember->user->username;
+                $discriminators[] = $bannedMember->user->discriminator;
             }
         }
 
-        sort($nicknames, SORT_NATURAL);
-        sort($discriminators, SORT_NUMERIC);
+        $nbMembresBannis = count($bannedMembers);
+        $nbMembresParPage = 10;
+        $nbPages = ceil($nbMembresBannis / $nbMembresParPage);
 
-        if ($tri === 'nickname') {
-            $tabTri = $nicknames;
-        } else {
-            $tabTri = $discriminators;
+        if ($page > $nbPages || $page < 1) {
+            $page = 1;
+        }
+
+        if ($nbPages == 0) {
+            $nbPages = 1;
+        }
+
+        $debut = ($page - 1) * $nbMembresParPage;
+        
+        switch ($tri) {
+            case 'pseudoAZ':
+                natcasesort($nicknames);
+                $nicknames = array_values($nicknames);
+                $tableauDeTri = $nicknames;
+                $nomCurrentTri = "De A à Z";
+                break;
+
+            case 'pseudoZA':
+                natcasesort($nicknames);
+                $nicknames = array_values($nicknames);
+                $nicknames = array_reverse($nicknames);
+                $tableauDeTri = $nicknames;
+                $nomCurrentTri = "De Z à A";
+                break;
+
+            case 'discrimCroi':
+                sort($discriminators, SORT_NUMERIC);
+                $discriminators = array_values($discriminators);
+                $tableauDeTri = $discriminators;
+                $nomCurrentTri = "Discriminateur croissant";
+                break;
+
+            case 'discrimDecroi':
+                sort($discriminators, SORT_NUMERIC);
+                $discriminators = array_values($discriminators);
+                $discriminators = array_reverse($discriminators);
+                $tableauDeTri = $discriminators;
+                $nomCurrentTri = "Discriminateur décroissant";
+                break;
+        }
+
+        $tableauDeTri = array_slice($tableauDeTri, $debut, $nbMembresParPage);
+        $compteur = 0;
+
+        foreach ($tableauDeTri as $valeur){
+            if ($compteur === $nbMembresParPage) {
+                break;
+            }
+
+            foreach ($bannedMembers as $bannedMember){
+                switch ($tri) {
+                    case 'pseudoAZ':
+                        $tabKey = $bannedMember->user->username;
+                        break;
+        
+                    case 'pseudoZA':
+                        $tabKey = $bannedMember->user->username;
+                        break;
+        
+                    case 'discrimCroi':
+                        $tabKey = $bannedMember->user->discriminator;
+                        break;
+        
+                    case 'discrimDecroi':
+                        $tabKey = $bannedMember->user->discriminator;
+                        break;
+                }
+    
+                if ($tabKey === $valeur) {
+                    $membresBannis[] = $bannedMember;
+                    $compteur++;
+                }
+                
+            }
         }
 
         require 'src/view/moderation/membresBannisView.php';
@@ -215,7 +358,8 @@
         //Tableau des id Discord recueillis du tableau $listeSanctions
         $idDiscSanc = array();
         //Date pour l'éventuelle création d'une sanction dans la BDD
-        $date = date("Y-m-d H:i:s", time());
+        $date = new DateTime();
+        $dateBDD = $date->format('Y-m-d H:i:s');
 
         foreach ($listeSanctions as $sanction) {
             $idDiscSanc[] = $sanction->getIdDiscord();
@@ -226,7 +370,7 @@
             $typeSanction = "Bannissement";
             $raison = $membreBanni->reason;
             if (array_search($idDiscord, $idDiscSanc) === false) {
-                addSanction($idDiscord, $typeSanction, $raison, $date);
+                addSanction($idDiscord, $typeSanction, $raison, $dateBDD);
             }
         }
     }
@@ -255,22 +399,156 @@
         $user = getBannedMemberByDiscordId($id);
 
         $sanction = getUserLastBan($id);
-
+        
         require_once 'src/view/moderation/dernierBanUtilView.php';
     }
 
-    // Vérifier et actualiser les données des utilisateurs Discord sanctionnés sur le serveur.
-
+    
     //Afficher l'historique des membres
-    function displayLastestSanctions(){
+    function displayLastestSanctions(
+        $tri, 
+        $filtre, 
+        $page, 
+        $recherche, 
+        $valBan,
+        $valExpu, 
+        $valAvert
+    )
+    {
+        // Vérifier et actualiser les données des utilisateurs Discord sanctionnés sur le serveur.
         verifierUtilisateursSanctionnes();
 
-        $sanctions = getAllSanctions();
-        $utilisateursS = getAllUtilisateursSanctionnes();
+        //-----------
+        // Recherche
+        //-----------
+       
+
+        //---------
+        // Filtres
+        //---------
+
+        // Initialisation de la variable $sqlFiltre pour les requêtes SQL
+        $sqlFiltre = "";
+
+        switch ($filtre) {
+            case 'all':
+                $sqlFiltre = "";
+                $valBan = 1;
+                $valExpu = 1;
+                $valAvert = 1;
+                break;
+
+            case 'banOnly':
+                $sqlFiltre = "WHERE sanction.typeSanction='Bannissement'";
+                $valBan = 1;
+                $valExpu = 0;
+                $valAvert = 0;
+                break;
+
+            case 'expuOnly':
+                $sqlFiltre = "WHERE sanction.typeSanction='Expulsion'";
+                $valBan = 0;
+                $valExpu = 1;
+                $valAvert = 0;
+                break;
+
+            case 'avertOnly':
+                $sqlFiltre = "WHERE sanction.typeSanction='Avertissement'";
+                $valBan = 0;
+                $valExpu = 0;
+                $valAvert = 1;
+                break;
+
+            case 'banExpu':
+                $sqlFiltre = "WHERE sanction.typeSanction IN ('Bannissement', 'Expulsion')";
+                $valBan = 1;
+                $valExpu = 1;
+                $valAvert = 0;
+                break;
+
+            case 'banAvert':
+                $sqlFiltre = "WHERE sanction.typeSanction IN ('Bannissement', 'Avertissement')";
+                $valBan = 1;
+                $valExpu = 0;
+                $valAvert = 1;
+                break;
+            
+            case 'expuAvert':
+                $sqlFiltre = "WHERE sanction.typeSanction IN ('Expulsion', 'Avertissement')";
+                $valBan = 0;
+                $valExpu = 1;
+                $valAvert = 1;
+                break;
+            
+        }
+
+        //-----
+        // Tri
+        //-----
+
+        // Initialisation de la variable $sqlTri pour les requêtes SQL
+        $sqlTri = "";
+
+        switch ($tri) {
+            case 'lastASC':
+                $sqlTri = "ORDER BY sanction.id ASC";
+                $nomCurrentTri = "Chronologique";
+                break;
+                
+            case 'lastDESC':
+                $sqlTri = "ORDER BY sanction.id DESC";
+                $nomCurrentTri = "Antéchronologique";
+                break;
+            
+            case 'pseudoASC':
+                $sqlTri = "ORDER BY utilisateursanctionne.username ASC";
+                $nomCurrentTri = "De A à Z";
+                break;
+                
+            case 'pseudoDESC':
+                $sqlTri = "ORDER BY utilisateursanctionne.username DESC";
+                $nomCurrentTri = "De Z à A";
+                break;
+
+            case 'discrimASC':
+                $sqlTri = "ORDER BY utilisateursanctionne.discriminator ASC";
+                $nomCurrentTri = "Discriminateur croissant";
+                break;
+
+            case 'discrimDESC':
+                $sqlTri = "ORDER BY utilisateursanctionne.discriminator DESC";
+                $nomCurrentTri = "Discriminateur décroissant";
+                break;
+        }
+        
+        //------------------------
+        // Pagination + sanctions
+        //------------------------
+        $sql = "SELECT COUNT(id) FROM sanction " . $sqlFiltre;
+        $nbSanctions = requeteInfoSanctionSQL($sql); //Nombre total de sanctions
+        $nbSanctionsParPage = 10; //Nombre de sanctions par page
+        $nbPages = ceil($nbSanctions / $nbSanctionsParPage);
+
+        if ($page > $nbPages || $page < 1) {
+            $page = 1;
+        }
+
+        if ($nbPages == 0) {
+            $nbPages = 1;
+        }
+
+        $debut = ($page - 1) * $nbSanctionsParPage;
+        $sqlParam = "INNER JOIN utilisateursanctionne ON sanction.idDiscord = utilisateursanctionne.idDiscord";
+        $sqlParam .= " " . $sqlFiltre . " " . $sqlTri . " ";
+
+        $sanctions = getSpecificSanctions($sqlParam, $debut, $nbSanctionsParPage);
 
         if ($sanctions === false) {
             $sanctions = "Aucune sanction trouvée";
         }
+
+        //Tableau des utilisateurs sanctionnés
+        $utilisateursS = getAllUtilisateursSanctionnes();
 
         require "src/view/moderation/listeSanctionsView.php";
     }

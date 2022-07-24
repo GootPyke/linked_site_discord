@@ -74,7 +74,7 @@ require_once 'src/controller/moderationController.php';
             case 'connexionP1':
                 $_SESSION['params'] = array(
                     'client_id' => OAUTH2_CLIENT_ID,
-                    'redirect_uri' => 'https://localhost/projet17/index.php?action=connexionP2',
+                    'redirect_uri' => 'https://localhost/sitediscord/index.php?action=connexionP2',
                     'response_type' => 'code',
                     'scope' => 'identify guilds guilds.members.read'
                 );
@@ -90,7 +90,7 @@ require_once 'src/controller/moderationController.php';
                     "grant_type" => "authorization_code",
                     'client_id' => OAUTH2_CLIENT_ID,
                     'client_secret' => OAUTH2_CLIENT_SECRET,
-                    'redirect_uri' => 'https://localhost/projet17/index.php?action=connexionP2',
+                    'redirect_uri' => 'https://localhost/sitediscord/index.php?action=connexionP2',
                     'code' => get('code')
                     ));
 
@@ -156,38 +156,137 @@ require_once 'src/controller/moderationController.php';
             //* Modération              *
             //***************************
             case 'moderation':
-                if (isset($_GET["tri"])) {
-                    displayMembers($_GET["tri"]);
-                } else {
-                    displayMembers();
+                if (isset($_SESSION['mod']) === false) {
+                    header("Location: index.php?action=accueil");
+                } else if ($_SESSION['mod'] === false){
+                    header("Location: index.php?action=accueil");
                 }
+
+                $tri = 'pseudoAZ';
+                $page = 1;
+                $recherche = false;
+
+                if (isset($_POST["tri-sel"])) {
+                    $tri = $_POST["tri-sel"];
+                } else if(isset($_GET["tri"])){
+                    $tri = $_GET["tri"];
+                }
+
+                if (isset($_GET["page"])) {
+                    $page = $_GET["page"];
+                }
+
+                displayMembers($tri, $page, $recherche);
                 break;
 
             case 'sanction':
+                if (isset($_SESSION['mod']) === false) {
+                    header("Location: index.php?action=accueil");
+                } else if ($_SESSION['mod'] === false){
+                    header("Location: index.php?action=accueil");
+                }
+
                 sanctionner();
                 break;
 
             case 'validerSanction':
+                if (isset($_SESSION['mod']) === false) {
+                    header("Location: index.php?action=accueil");
+                } else if ($_SESSION['mod'] === false){
+                    header("Location: index.php?action=accueil");
+                }
+
                 validerSanction();
                 header("Location: index.php?action=moderation");
                 break;
 
             case 'membresBannis':
-                if (isset($_GET["tri"])) {
-                    displayBannedMembers($_GET["tri"]);
-                } else {
-                    displayBannedMembers();
+                if (isset($_SESSION['mod']) === false) {
+                    header("Location: index.php?action=accueil");
+                } else if ($_SESSION['mod'] === false){
+                    header("Location: index.php?action=accueil");
                 }
+
+                $tri = 'pseudoAZ';
+                $page = 1;
+                $recherche = false;
+
+                if (isset($_POST["tri-sel"])) {
+                    $tri = $_POST["tri-sel"];
+                } else if(isset($_GET["tri"])){
+                    $tri = $_GET["tri"];
+                }
+
+                if (isset($_GET["page"])) {
+                    $page = $_GET["page"];
+                }
+
+                displayBannedMembers($tri, $page, $recherche);
                 break;
 
             //Voir la raison du bannissement
             case 'viewRaison':
+                if (isset($_SESSION['mod']) === false) {
+                    header("Location: index.php?action=accueil");
+                } else if ($_SESSION['mod'] === false){
+                    header("Location: index.php?action=accueil");
+                }
+
                 viewRaison();
                 break;
 
             //Voir l'historique des sanctions
             case 'histoSanc':
-                displayLastestSanctions();
+                if (isset($_SESSION['mod']) === false) {
+                    header("Location: index.php?action=accueil");
+                } else if ($_SESSION['mod'] === false){
+                    header("Location: index.php?action=accueil");
+                }
+                
+                $tri = "lastDESC";
+                $filtre = "all";
+                $page = 1;
+                $recherche = false;
+                $valBan = 1;
+                $valExpu = 1;
+                $valAvert = 1;
+
+                if (isset($_POST["tri-sel"])) {
+                    $tri = $_POST["tri-sel"];
+                } else if (isset($_GET["tri"])) {
+                    $tri = $_GET["tri"];
+                }
+
+                if (isset($_GET["page"])) {
+                    $page = $_GET["page"];
+                } 
+
+                if (isset($_GET["recherche"])) {
+                    $recherche = $_GET["recherche"];
+                }
+
+                if (isset($_POST["ban-check"]) || isset($_POST["expu-check"]) || isset($_POST["avert-check"])) {
+                    
+                    if ((isset($_POST["ban-check"]) === true) && (isset($_POST["expu-check"]) === false) && (isset($_POST["avert-check"]) === false)){
+                        $filtre = "banOnly";
+                    } else if ((isset($_POST["ban-check"]) === false) && (isset($_POST["expu-check"]) === true) && (isset($_POST["avert-check"]) === false)){
+                        $filtre = "expuOnly";
+                    } else if ((isset($_POST["ban-check"]) === false) && (isset($_POST["expu-check"]) === false) && (isset($_POST["avert-check"]) === true)){
+                        $filtre = "avertOnly";
+                    } else if ((isset($_POST["ban-check"]) === true) && (isset($_POST["expu-check"]) === true) && (isset($_POST["avert-check"]) === false)){
+                        $filtre = "banExpu";
+                    } else if ((isset($_POST["ban-check"]) === true) && (isset($_POST["expu-check"]) === false) && (isset($_POST["avert-check"]) === true)){
+                        $filtre = "banAvert";
+                    } else if ((isset($_POST["ban-check"]) === false) && (isset($_POST["expu-check"]) === true) && (isset($_POST["avert-check"]) === true)){
+                        $filtre = "expuAvert";
+                    } 
+                } else if (isset($_GET["filtre"])) {
+                    $filtre = $_GET["filtre"];
+                } else {
+                    $filtre = "all";    
+                }
+
+                displayLastestSanctions($tri, $filtre, $page, $recherche, $valBan, $valExpu, $valAvert);
                 break;
         }
     } else {
