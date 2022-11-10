@@ -1,6 +1,6 @@
 <?php 
-require_once "src/model/connexionBDDModel.php";
-require_once "src/controller/dateController.php";
+require_once SITE_ROOT . "/src/model/autres/connexionBDDModel.php";
+require_once SITE_ROOT . "/src/helper/dateHelper.php";
     
     class Sanction{
         private $id;
@@ -53,9 +53,9 @@ require_once "src/controller/dateController.php";
         }
     }
 
-    function getSpecificSanctions($sqlParam, $debut, $fin){
-        $sql = "SELECT * FROM sanction " . $sqlParam . "LIMIT :debut, :fin";
-        $data = [];
+    function getSanctionById($id){
+        $sql = "SELECT * FROM sanction WHERE id = :id";
+        $data = "";
         
         try {
             $bdd = connexionBDD();
@@ -64,19 +64,16 @@ require_once "src/controller/dateController.php";
             
             $req->setFetchMode(PDO::FETCH_CLASS, 'Sanction');
 
-            $req->bindValue(':debut', $debut, PDO::PARAM_INT);
-            $req->bindValue(':fin', $fin, PDO::PARAM_INT);
+            $req->bindValue(':id', $id, PDO::PARAM_INT);
             
             $req->execute();
             
-            $data = $req->fetchAll();
+            $data = $req->fetch();
             
-            foreach ($data as $donnee) {
-                $dateSanction = date_create_from_format('Y-m-d H:i:s', $donnee->getDateSanction());
-                $dateFormatee = $dateSanction->format('d F Y \à H\hi');
-                $dateFormateeFinale = transformerDateEnFrancais($dateFormatee);
-                $donnee->setDateSanction($dateFormateeFinale);
-            }
+            $dateSanction = date_create_from_format('Y-m-d H:i:s', $data->getDateSanction());
+            $dateFormatee = $dateSanction->format('d F Y \à H\hi');
+            $dateFormateeFinale = transformerDateEnFrancais($dateFormatee);
+            $data->setDateSanction($dateFormateeFinale);
         } catch (PDOException $ex) {
             return false;
         } finally {
@@ -104,8 +101,9 @@ require_once "src/controller/dateController.php";
     }
     
     //Obtenir toutes les sanctions de l'utilisateur
-    function getUserSanctionsByIdDiscord($idDiscord){
-        $sql = "SELECT * FROM sanction WHERE idDiscord= :idDiscord";
+    function getUserSanctionsByIdDiscord($tabIdDiscord){
+        $questionmarks = str_repeat("?,", count($tabIdDiscord)-1) . "?";
+        $sql = "SELECT * FROM sanction WHERE idDiscord IN ($questionmarks)";
         $data = array();
 
         try {
@@ -115,9 +113,7 @@ require_once "src/controller/dateController.php";
 
             $req->setFetchMode(PDO::FETCH_CLASS, 'Sanction');
 
-            $req->bindValue(':idDiscord', $idDiscord, PDO::PARAM_STR);
-
-            $req->execute();
+            $req->execute($tabIdDiscord);
 
             $data = $req->fetchAll();
 

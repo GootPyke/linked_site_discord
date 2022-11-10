@@ -1,0 +1,25 @@
+/************************************/
+/*             Accueil              */
+/************************************/
+
+#accueil {
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#p-titre {
+    text-align: center;
+    font-size: 2.5em;
+    width: 50%;
+    font-family: var(--police-titre);
+}
+
+#p-texte {
+    width: 50%;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 10px;
+}

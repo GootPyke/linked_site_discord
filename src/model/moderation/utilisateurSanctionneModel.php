@@ -1,5 +1,5 @@
 <?php 
-require_once "src/model/connexionBDDModel.php";
+        require_once SITE_ROOT . "/src/model/autres/connexionBDDModel.php";
     
     class UtilisateurSanctionne{
         private $id;
@@ -7,6 +7,7 @@ require_once "src/model/connexionBDDModel.php";
         private $username;
         private $discriminator;
         private $avatarHash;
+        private $surnom;
         
         public function getId() {return $this->id;}
         
@@ -21,6 +22,9 @@ require_once "src/model/connexionBDDModel.php";
         
         public function getAvatarHash() {return $this->avatarHash;}
         public function setAvatarHash($avatarHash) {$this->avatarHash = $avatarHash;}
+
+        public function getSurnom() {return $this->surnom;}
+        public function setSurnom($surnom) {$this->surnom = $surnom;}
     }
     
     //Obtenir toutes les sanctions pour les afficher
@@ -44,9 +48,32 @@ require_once "src/model/connexionBDDModel.php";
             return $data;
         }
     }
+
+    function getUtilisateurSanctionneByIdDiscord($idDiscord){
+        $sql = "SELECT * FROM utilisateursanctionne WHERE idDiscord= :idDiscord";
+        $data = "";
+        
+        try {
+            $bdd = connexionBDD();
+            
+            $req = $bdd->prepare($sql);
+
+            $req->bindValue(':idDiscord', $idDiscord, PDO::PARAM_STR);
+            
+            $req->setFetchMode(PDO::FETCH_CLASS, 'UtilisateurSanctionne');
+            
+            $req->execute();
+            
+            $data = $req->fetch();
+        } catch (PDOException $ex) {
+            return false;
+        } finally {
+            return $data;
+        }
+    }
     
-    function addUtilisateurSanctionne($idDiscord, $username, $discriminator, $avatarHash){
-        $sql = "INSERT INTO utilisateursanctionne(idDiscord, username, discriminator, avatarHash) VALUES (:idDiscord, :username, :discriminator, :avatarHash)";
+    function addUtilisateurSanctionne($idDiscord, $username, $discriminator, $avatarHash, $surnom = NULL) {
+        $sql = "INSERT INTO utilisateursanctionne(idDiscord, username, discriminator, avatarHash, surnom) VALUES (:idDiscord, :username, :discriminator, :avatarHash, :surnom)";
 
         try {
             $bdd = connexionBDD();
@@ -57,6 +84,7 @@ require_once "src/model/connexionBDDModel.php";
             $req->bindValue(':username', $username, PDO::PARAM_STR);
             $req->bindValue(':discriminator', $discriminator, PDO::PARAM_STR);
             $req->bindValue(':avatarHash', $avatarHash, PDO::PARAM_STR);
+            $req->bindValue(':surnom', $surnom, PDO::PARAM_STR);
 
             $req->execute();
         } catch (PDOException $ex) {
@@ -112,6 +140,23 @@ require_once "src/model/connexionBDDModel.php";
             $req->execute();
         } catch (PDOException $ex) {
             var_dump("Erreur lors de la modification du Hash Avatar d'un utilisateur : {$ex->getMessage()}");
+        }
+    }
+
+    function editSurnom($idDiscord, $newSurnom){
+        $sql = "UPDATE utilisateursanctionne SET surnom= :newSurnom WHERE idDiscord= :idDiscord";
+
+        try {
+            $bdd = connexionBDD();
+
+        $req = $bdd->prepare($sql);
+
+            $req->bindValue(':idDiscord', $idDiscord, PDO::PARAM_STR);
+            $req->bindValue(':newSurnom', $newSurnom, PDO::PARAM_STR);
+
+            $req->execute();
+        } catch (PDOException $ex) {
+            var_dump("Erreur lors de la modification du surnom d'un utilisateur : {$ex->getMessage()}");
         }
     }
 

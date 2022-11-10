@@ -6,7 +6,10 @@
 <div id='div-generale-m'>
     <div id='gestion'>
         <div id="tri">
-            <form action="index.php?action=membresBannis&tri=<?= $tri ?>&page=1" method="post">
+            <?php 
+            if ($utilisateursFinaux !== false) {
+            ?>
+                <form action="index.php?action=moderation&menu=utilisateursBannis&recherche=<?= $termeDeRecherche ?>&page=1" method="post">
                     <p>Tri :</p>
     
                     <select name="tri-sel" id="tri-sel" onChange="this.form.submit()">
@@ -45,57 +48,83 @@
                         >Discriminateur décroissant</option>
                     </select>
                 </form>
+        <?php 
+            }
+        ?>
         </div>
     
         <!-- pagination -->
         <div id='pages'>
             <?php 
-            echo "<a href='index.php?action=membresBannis&tri=" . $tri ."&page=". $page-1 . "'><img src='src/images/fle_gauche.svg' alt='flèche gauche'></a>";
+            if (($utilisateursFinaux !== false) && ($page != 1)) {
+                echo "<a href='index.php?action=moderation&menu=utilisateursBannis&tri=" . $tri ."&recherche=" . $termeDeRecherche . "&page=". $page-1 . "'><img src='src/images/fle_gauche.svg' alt='flèche gauche'></a>";
+            }
             
             echo"<p id='infoPage'>Page " . $page . " sur " . $nbPages ."</p>";
     
-            echo "<a href='index.php?action=membresBannis&tri=" . $tri . "&page=" . $page+1 . "'><img src='src/images/fle_droite.svg' alt='flèche droite'></a>";
+            if (($utilisateursFinaux !== false) && ($page != $nbPages)) {
+                echo "<a href='index.php?action=moderation&menu=utilisateursBannis&tri=" . $tri . "&recherche=" . $termeDeRecherche . "&page=" . $page+1 . "'><img src='src/images/fle_droite.svg' alt='flèche droite'></a>";
+            }
             ?>
+        </div>
+
+        <div id='recherche'>
+            <form action="index.php?action=moderation&menu=utilisateursBannis&tri=<?= $tri ?>&page=1" method='post'>
+                <label for="recherche">Recherche :</label>
+                <div id='hs-rech'>
+                    <div id='hs-r-1'>
+                        <a href='index.php?action=moderation&menu=utilisateursBannis'><img src="src/images/croix.svg" alt="effacer"></a>
+                    </div>
+                    <input type="text" name="recherche" id="recherche" placeholder="<?= $termeDeRecherche ?>">
+                    <div id='hs-r-2'>
+                        <button type="submit"><img src="src/images/recherche_loupe.svg" alt="loupe"></button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
     <div class='membres'>
         <?php 
-            foreach ($membresBannis as $membreBanni) {
+            if (is_array($utilisateursAAfficher) === true) {
+                foreach ($utilisateursAAfficher as $utilisateurAAfficher) {
         ?>
-                <div class="membre">
-                    <?php 
-                    $img = CDN_AVATAR_REFERENCE . $membreBanni->user->id . '/' . $membreBanni->user->avatar . '.png';
-            
-                    if (strpos($img, 'a_')) {
-                        $img = CDN_AVATAR_REFERENCE . $membreBanni->user->id . '/' . $membreBanni->user->avatar . '.gif';
-                    }
-                    ?>
-                    <div class='div-img'>
-                    <?php 
-                    echo '<p><img src="'. $img .'" alt=""></p>';
-                    ?>
-                    </div>
+                    <div class="membre">
+                        <?php 
+                        $img = CDN_AVATAR_REFERENCE . $utilisateurAAfficher->user->id . '/' . $utilisateurAAfficher->user->avatar . '.png';
+                
+                        if (strpos($img, 'a_')) {
+                            $img = CDN_AVATAR_REFERENCE . $utilisateurAAfficher->user->id . '/' . $utilisateurAAfficher->user->avatar . '.gif';
+                        }
+                        ?>
+                        <div class='div-img'>
+                        <?php 
+                        echo '<p><img src="'. $img .'" alt=""></p>';
+                        ?>
+                        </div>
 
-                    <div class="div-username">
-                    <?php 
-                    echo '<h1>'. $membreBanni->user->username.'<p>#'. $membreBanni->user->discriminator .'</p></h1>';
-                    ?>
-                    </div>
+                        <div class="div-username">
+                        <?php 
+                        echo '<h1>'. $utilisateurAAfficher->user->username.'<p>#'. $utilisateurAAfficher->user->discriminator .'</p></h1>';
+                        ?>
+                        </div>
 
-                    <div class="div-deban">
-                    <?php
-                    echo '<a href="index.php?action=sanction&sanction=deban&id='. $membreBanni->user->id .'">Débannir</a>';
-                    ?>
+                        <div id="act-sanc">
+                            <div class="div-deban">
+                            <?php
+                            echo '<a href="index.php?action=moderation&menu=sanction&sanction=deban&id='. $utilisateurAAfficher->user->id .'">Révoquer</a>';
+                            ?>
+                            </div>
+    
+                            <div class="div-raison">
+                                <a href="index.php?action=moderation&menu=voirRaison&idSanction=<?= $utilisateurAAfficher->sanctions['bannissement'][0]->getId() ?>">Raison</a>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="div-raison">
-                    <?php 
-                    echo '<a href="index.php?action=viewRaison&id='. $membreBanni->user->id .'">Raison du bannissement</a>';
-                    ?>
-                    </div>
-                </div>
         <?php
+                }
+            } else {
+                echo "<p id='noResult'>" . $utilisateursAAfficher . "</p>";
             }
         ?>  
     </div>

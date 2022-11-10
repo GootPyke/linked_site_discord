@@ -1,13 +1,11 @@
 <?php 
-    require_once "src/model/utilisateurSanctionneModel.php";
-    require_once "src/model/sanctionsModel.php";
-    require_once "src/model/utilisateurSanctionneModel.php";
-    require_once "src/controller/moderationController.php";
+    require_once SITE_ROOT . "/src/model/moderation/utilisateurSanctionneModel.php";
+    require_once SITE_ROOT . "/src/model/moderation/sanctionsModel.php";
 
     //Fonction qui va actualiser les utilisateurs sanctionnés en ajoutant les membres bannis non référencés dans la base de données
     function addNotReferencedBannedUsers(){
         // Tableau des membres bannis (via API Discord)
-        $bannedMembers = getBannedMembers();
+        $bannedMembers = $_SESSION["membresBannis"];
         // Tableau des utilisateurs sanctionnés
         $listUserSanction = getAllUtilisateursSanctionnes();
         //Tableau des identifiants des utilisateurs sanctionnés
@@ -31,7 +29,7 @@
     }
 
     //Fonction qui va ajouter un utilisateur sanctionné après vérification qu'il ne soit pas déjà dans la base de données
-    function addToDataUtilisateurSanctionne($idDiscord, $username, $discriminator, $avatar){
+    function addToDataUtilisateurSanctionne($idDiscord, $username, $discriminator, $avatar, $surnom = NULL){
         // Tableau des utilisateurs sanctionnés
         $listUserSanction = getAllUtilisateursSanctionnes();
         //Tableau des identifiants des utilisateurs sanctionnés
@@ -43,16 +41,16 @@
         }
 
         if (array_search($idDiscord, $tabIdUserSanc) === false) {
-            addUtilisateurSanctionne($idDiscord, $username, $discriminator, $avatar);
+            addUtilisateurSanctionne($idDiscord, $username, $discriminator, $avatar, $surnom);
         }
     }
 
     //Fonction qui va actualiser les informations des utilisateurs sanctionnés du serveur
     function updateMembresSanctionnes(){
         //Tableau des membres du serveur
-        $listMembres = getMembers();
+        $listMembres = $_SESSION["membres"];
         //Tableau des membres bannis
-        $bannedMembers = getBannedMembers();    
+        $bannedMembers = $_SESSION["membresBannis"];    
         //Tableau des utilisateurs sanctionnés
         $listUserSanction = getAllUtilisateursSanctionnes();
 
@@ -76,6 +74,12 @@
 
                     if ($userSanction->getAvatarHash() !== $membre->user->avatar) {
                         editAvatarHash($membre->user->id, $membre->user->avatar);
+                    }
+
+                    if (isset($membre->nick)) {
+                        if ($userSanction->getSurnom() !== $membre->nick) {
+                            editSurnom($membre->user->id, $membre->nick);
+                        }
                     }
                 }
             }

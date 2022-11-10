@@ -1,0 +1,107 @@
+/************************************/
+/*       Barre de navigation        */
+/************************************/
+header {
+    height: 6.5em;
+}
+
+header nav {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: var(--ratio-menu);
+    background-color: var(--couleur-2);
+}
+
+header nav ul {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0em 2em;
+    grid-column-start: 2;
+}
+
+header nav ul li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    margin-right: 2em;
+    height: 100%;
+}
+
+header nav ul li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-family: var(--police-titre-2);
+    color: var(--couleur-1);
+    height: auto;
+    font-size: 1.4em;
+}
+
+#modLink {
+    color: var(--couleur-6);
+}
+
+/* Bouton se connecter */
+
+#se-co {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0.2em;
+}
+
+#se-co2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40px;
+    padding: 0.5em 3em;
+    background-color: var(--couleur-3);
+    font-family: var(--police-titre-2);
+    text-decoration: none;
+    color: var(--couleur-1);
+    font-size: 1.35em;
+}
+
+/* Profil */
+#li-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 1%;
+    grid-column-start: 1;
+    cursor: pointer;
+}
+
+#a-user {
+    border-radius: 100px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    border: 3px solid var(--couleur-3);
+}
+
+#img-user {
+    width: 4.5em;
+    height: 4.5em;
+}
+
+#pseudo-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--police-titre-2);
+}
+
+#pseudo-user p {
+    font-size: 1.4em;
+    color: var(--couleur-1);
+}

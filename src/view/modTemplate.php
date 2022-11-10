@@ -4,9 +4,9 @@
 
 <div id='mod-body'>
     <div class="menu">
-        <a href="index.php?action=moderation">Membres</a>
-        <a href="index.php?action=membresBannis">Utilisateurs bannis</a>
-        <a href="index.php?action=histoSanc">Historique des sanctions</a>
+        <a href="index.php?action=moderation&menu=membres" <?php if($menuMod === 'mm') {echo 'id="a-selected"';}?>>Membres</a>
+        <a href="index.php?action=moderation&menu=utilisateursBannis" <?php if($menuMod === 'mb') {echo 'id="a-selected"';}?>>Utilisateurs bannis</a>
+        <a href="index.php?action=moderation&menu=historiqueSanctions" <?php if($menuMod === 'hs') {echo 'id="a-selected"';}?>>Historique des sanctions</a>
     </div>
 
     <?= $modContent ?>

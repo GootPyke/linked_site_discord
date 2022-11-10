@@ -7,7 +7,7 @@
     <div id="tdb-hs">
         <!-- tri -->
         <div id='tdb-hs-tri'>
-            <form action="index.php?action=histoSanc&tri=<?= $tri ?>&page=1&filtre=<?= $filtre ?>" method="post">
+            <form action="index.php?action=moderation&menu=historiqueSanctions&recherche=<?= $termeDeRecherche ?>&page=1&filtre=<?= $filtre ?>" method="post">
                 <p>Tri :</p>
 
                 <select name="tri-sel" id="tri-sel" onChange="this.form.submit()">
@@ -68,7 +68,7 @@
 
         <!-- filtres -->
         <div id='tdb-hs-filtre'>
-            <form action="index.php?action=histoSanc&tri=<?= $tri ?>&page=1" method="post">
+            <form action="index.php?action=moderation&menu=historiqueSanctions&tri=<?= $tri ?>&page=1&recherche=<?= $termeDeRecherche ?>" method="post">
                 <p>Filtrage par type de sanction :</p>
 
                 <div id='filtre-div-checks'>
@@ -116,72 +116,84 @@
         <!-- pagination -->
         <div id='tdb-hs-page'>
             <?php 
-            echo "<a href='index.php?action=histoSanc&tri=" . $tri ."&filtre=". $filtre . "&page=". $page-1 . "'><img src='src/images/fle_gauche.svg' alt='flèche gauche'></a>";
+            if (($sanctionsAAfficher !== false) && ($page != 1)) {
+                echo "<a href='index.php?action=moderation&menu=historiqueSanctions&tri=" . $tri ."&filtre=". $filtre . "&page=". $page-1 . "&recherche=" . $termeDeRecherche ."'><img src='src/images/fle_gauche.svg' alt='flèche gauche'></a>";
+            }
             
             echo"<p id='infoPage'>Page " . $page . " sur " . $nbPages ."</p>";
 
-            echo "<a href='index.php?action=histoSanc&tri=" . $tri ."&filtre=". $filtre . "&page=". $page+1 . "'><img src='src/images/fle_droite.svg' alt='flèche droite'></a>";
+            if (($sanctionsAAfficher !== false) && ($page != $nbPages)) {
+                echo "<a href='index.php?action=moderation&menu=historiqueSanctions&tri=" . $tri ."&filtre=". $filtre . "&page=". $page+1 . "&recherche=" . $termeDeRecherche ."'><img src='src/images/fle_droite.svg' alt='flèche droite'></a>";
+            }
             ?>
         </div>
 
         <!-- recherche -->
         <div id='tdb-hs-rech'>
-            <form action="<?= $lienActionFrom ?>" method="post">
-                <label for="rech">Recherche</label>
-                <input type="text" name="rech" id="rech">
+            <form action="index.php?action=moderation&menu=historiqueSanctions&tri=<?= $tri ?>&filtre=<?= $filtre ?>&page=1" method='post'>
+                <label for="recherche">Recherche :</label>
+
+                <div id='hs-rech'>
+                    <div id='hs-r-1'>
+                        <a href='index.php?action=moderation&menu=historiqueSanctions'><img src="src/images/croix.svg" alt="effacer"></a>
+                    </div>
+                    <input type="text" name="recherche" id="hs-recherche" placeholder="<?= $termeDeRecherche ?>">
+                    <div id='hs-r-2'>
+                        <button type="submit"><img src="src/images/recherche_loupe.svg" alt="loupe"></button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
  
     <div class='sanctions'>
         <?php 
-        for ($i = 0; $i < $nbSanctionsParPage; $i++) { 
-            if (isset($sanctions[$i]) === false) {
-                continue;
-            }
-            foreach ($utilisateursS as $utilisateurS) {
-                if ($sanctions[$i]->getIdDiscord() === $utilisateurS->getIdDiscord()) {
+        if ($sanctionsAAfficher != [] && $sanctionsAAfficher != false){
+            foreach ($sanctionsAAfficher as $sancAA) { 
+                foreach ($utilisateursS as $utilisateurS) {
+                    if ($sancAA->getIdDiscord() === $utilisateurS->getIdDiscord()) {
         ?>
-                    <div class="sanction">
-                        <div class="photoMembreSanc">
-                            <?php 
-                            $img = CDN_AVATAR_REFERENCE . $utilisateurS->getIdDiscord() . '/' . $utilisateurS->getAvatarHash() . '.png';
-                
-                            if (strpos($img, 'a_')) {
-                                $img = CDN_AVATAR_REFERENCE . $utilisateurS->getIdDiscord() . '/' . $utilisateurS->getAvatarHash() . '.gif';
-                            }
+                        <div class="sanction">
+                            <div class="photoMembreSanc">
+                                <?php 
+                                $img = CDN_AVATAR_REFERENCE . $utilisateurS->getIdDiscord() . '/' . $utilisateurS->getAvatarHash() . '.png';
+                    
+                                if (strpos($img, 'a_')) {
+                                    $img = CDN_AVATAR_REFERENCE . $utilisateurS->getIdDiscord() . '/' . $utilisateurS->getAvatarHash() . '.gif';
+                                }
 
-                            echo '<p><img src="'. $img .'" alt=""></p>';
-                            ?>
-                        </div>
+                                echo '<p><img src="'. $img .'" alt=""></p>';
+                                ?>
+                            </div>
 
-                        <div class="pseudoSanc">
-                            <?php 
-                            echo '<h1>'. $utilisateurS->getUsername() .'<p>#'. $utilisateurS->getDiscriminator() .'</p></h1>';
-                            ?>
-                        </div>
+                            <div class="pseudoSanc">
+                                <?php 
+                                echo '<h1>'. $utilisateurS->getUsername() .'<p>#'. $utilisateurS->getDiscriminator() .'</p></h1>';
+                                ?>
+                            </div>
 
-                        <div class="typeSanction">
-                            <?php 
-                            echo "<p>" . $sanctions[$i]->getTypeSanction() . "</p>";
-                            ?>
-                        </div>
+                            <div class="typeSanction">
+                                <?php 
+                                echo "<p>" . $sancAA->getTypeSanction() . "</p>";
+                                ?>
+                            </div>
 
-                        <div class="dateSanction">
-                            <?php 
-                            echo "<p>Sanctionné le " . $sanctions[$i]->getDateSanction() . "</p>";
-                            ?>
-                        </div>
+                            <div class="dateSanction">
+                                <?php 
+                                echo "<p>Sanctionné le " . $sancAA->getDateSanction() . "</p>";
+                                ?>
+                            </div>
 
-                        <div class="raisonSanc">
-                            <?php 
-                            echo "<a href=''>Raison</a>";
-                            ?>
+                            <div class="raisonSanc">
+                                <a href='index.php?action=moderation&menu=voirRaison&idSanction=<?= $sancAA->getId() ?>'>Raison</a>
+                            </div>
                         </div>
-                    </div>
         <?php
+                    }
                 }
             }
+        } else {
+            echo "<p>Aucune sanction trouvée</p>";
         }
         ?> 
     </div>

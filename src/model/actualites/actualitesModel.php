@@ -1,5 +1,6 @@
 <?php 
-    require_once "src/model/connexionBDDModel.php";
+    require_once SITE_ROOT . "/src/model/autres/connexionBDDModel.php";
+    require_once SITE_ROOT . "/src/helper/dateHelper.php";
     
     class Actualite{
         private $id;

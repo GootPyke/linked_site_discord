@@ -4,12 +4,18 @@ session_start();
 //Initialisation des paramètres en cas d'erreurs
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-ini_set('max_execution_time', 300); //300 seconds = 5 minutes. In case if your CURL is slow and is loading too much (Can be IPv6 problem)
+ini_set('max_execution_time', 600); //600 seconds = 10 minutes. In case if your CURL is slow and is loading too much (Can be IPv6 problem)
 
 error_reporting(E_ALL);
 
 $config = include('config.php');
 
+//Racine du site jusqu'à index.php
+define('SITE_ROOT', __DIR__);
+// Nb Membres par page - affichage modération
+define('NB_MEMBRES_AFFICHAGE_MOD', $config->NB_MEMBRES_AFFICHAGE_MOD);
+//Invitation Discord sur le serveur
+define('INVITATION_SERVEUR', $config->INVITATION_SERVEUR);
 //Id rôle modération sur SRV Discord
 define('ID_MODERATION', $config->ID_MODERATION);
 //Id SRV Discord
@@ -37,13 +43,11 @@ $_SESSION['apiURLGuildRoles'] = $config->apiURLGuildRoles;
 // Initialisation d'une variable utilisée pour les requêtes API de la modération
 $_SESSION["essai"] = false;
 
-// Définition de la locale utilisateur à français (Utile dans les ActuModel)
-setlocale(LC_TIME, 'french');
-
 //Appel des contrôleurs
-require_once 'src/controller/connexionController.php';
-require_once 'src/controller/actualitesController.php';
-require_once 'src/controller/moderationController.php';
+require_once SITE_ROOT . '/src/controller/autres/connexionController.php';
+require_once SITE_ROOT . '/src/controller/autres/roleController.php';
+require_once SITE_ROOT . '/src/controller/actualites/actualitesController.php';
+require_once SITE_ROOT . '/src/controller/moderation/moderationController.php';
 
     //Affichage page d'accueil
     function accueil(){
@@ -63,6 +67,7 @@ require_once 'src/controller/moderationController.php';
     if(isset($_GET["action"])){
         $getAction = htmlspecialchars($_GET["action"]); 
         $action = preg_replace('#&[a-z]*;#', '', $getAction);
+
         switch ($action) {
             case 'accueil':
                 accueil();
@@ -103,15 +108,17 @@ require_once 'src/controller/moderationController.php';
                 if(session('access_token')) {
                     $_SESSION['user'] = apiRequest($apiURLUserBase);
 
-                    $_SESSION["pseudo"] = $_SESSION['user']->username;
+                    //Données concernant les serveurs sur lesquels l'utilisateur est présent
+                    $_SESSION["dataGuild"] = apiRequest($_SESSION['apiURLGuild']);
 
-                    // $_SESSION["guild"] = apiRequest($_SESSION['apiURLGuild']);
+                    //Données sur l'utilisateur présent dans le serveur ou non.
+                    $_SESSION["dataGuildUserInfo"] = apiRequest($_SESSION['apiURLGuildInfo']);
 
-                    // $_SESSION['guildUserInfo'] = apiRequest($_SESSION['apiURLGuild']Info);
+                    //Données sur les rôles de l'utilisateur
+                    $_SESSION["dataGuildRoles"] = apiRequest2($_SESSION['apiURLGuildRoles']);
 
-                    // $_SESSION['guildRoles'] = apiRequest2($_SESSION['apiURLGuild']Roles);
-
-                    $_SESSION["mod"] = verificationModeration();
+                    $_SESSION["administrateur"] = verificationAdmin();
+                    $_SESSION["moderation"] = verificationModeration();
                 }
                 break;
 
@@ -156,137 +163,15 @@ require_once 'src/controller/moderationController.php';
             //* Modération              *
             //***************************
             case 'moderation':
-                if (isset($_SESSION['mod']) === false) {
-                    header("Location: index.php?action=accueil");
-                } else if ($_SESSION['mod'] === false){
-                    header("Location: index.php?action=accueil");
-                }
-
-                $tri = 'pseudoAZ';
-                $page = 1;
-                $recherche = false;
-
-                if (isset($_POST["tri-sel"])) {
-                    $tri = $_POST["tri-sel"];
-                } else if(isset($_GET["tri"])){
-                    $tri = $_GET["tri"];
-                }
-
-                if (isset($_GET["page"])) {
-                    $page = $_GET["page"];
-                }
-
-                displayMembers($tri, $page, $recherche);
-                break;
-
-            case 'sanction':
-                if (isset($_SESSION['mod']) === false) {
-                    header("Location: index.php?action=accueil");
-                } else if ($_SESSION['mod'] === false){
-                    header("Location: index.php?action=accueil");
-                }
-
-                sanctionner();
-                break;
-
-            case 'validerSanction':
-                if (isset($_SESSION['mod']) === false) {
-                    header("Location: index.php?action=accueil");
-                } else if ($_SESSION['mod'] === false){
-                    header("Location: index.php?action=accueil");
-                }
-
-                validerSanction();
-                header("Location: index.php?action=moderation");
-                break;
-
-            case 'membresBannis':
-                if (isset($_SESSION['mod']) === false) {
-                    header("Location: index.php?action=accueil");
-                } else if ($_SESSION['mod'] === false){
-                    header("Location: index.php?action=accueil");
-                }
-
-                $tri = 'pseudoAZ';
-                $page = 1;
-                $recherche = false;
-
-                if (isset($_POST["tri-sel"])) {
-                    $tri = $_POST["tri-sel"];
-                } else if(isset($_GET["tri"])){
-                    $tri = $_GET["tri"];
-                }
-
-                if (isset($_GET["page"])) {
-                    $page = $_GET["page"];
-                }
-
-                displayBannedMembers($tri, $page, $recherche);
-                break;
-
-            //Voir la raison du bannissement
-            case 'viewRaison':
-                if (isset($_SESSION['mod']) === false) {
-                    header("Location: index.php?action=accueil");
-                } else if ($_SESSION['mod'] === false){
-                    header("Location: index.php?action=accueil");
-                }
-
-                viewRaison();
-                break;
-
-            //Voir l'historique des sanctions
-            case 'histoSanc':
-                if (isset($_SESSION['mod']) === false) {
-                    header("Location: index.php?action=accueil");
-                } else if ($_SESSION['mod'] === false){
-                    header("Location: index.php?action=accueil");
-                }
-                
-                $tri = "lastDESC";
-                $filtre = "all";
-                $page = 1;
-                $recherche = false;
-                $valBan = 1;
-                $valExpu = 1;
-                $valAvert = 1;
-
-                if (isset($_POST["tri-sel"])) {
-                    $tri = $_POST["tri-sel"];
-                } else if (isset($_GET["tri"])) {
-                    $tri = $_GET["tri"];
-                }
-
-                if (isset($_GET["page"])) {
-                    $page = $_GET["page"];
-                } 
-
-                if (isset($_GET["recherche"])) {
-                    $recherche = $_GET["recherche"];
-                }
-
-                if (isset($_POST["ban-check"]) || isset($_POST["expu-check"]) || isset($_POST["avert-check"])) {
-                    
-                    if ((isset($_POST["ban-check"]) === true) && (isset($_POST["expu-check"]) === false) && (isset($_POST["avert-check"]) === false)){
-                        $filtre = "banOnly";
-                    } else if ((isset($_POST["ban-check"]) === false) && (isset($_POST["expu-check"]) === true) && (isset($_POST["avert-check"]) === false)){
-                        $filtre = "expuOnly";
-                    } else if ((isset($_POST["ban-check"]) === false) && (isset($_POST["expu-check"]) === false) && (isset($_POST["avert-check"]) === true)){
-                        $filtre = "avertOnly";
-                    } else if ((isset($_POST["ban-check"]) === true) && (isset($_POST["expu-check"]) === true) && (isset($_POST["avert-check"]) === false)){
-                        $filtre = "banExpu";
-                    } else if ((isset($_POST["ban-check"]) === true) && (isset($_POST["expu-check"]) === false) && (isset($_POST["avert-check"]) === true)){
-                        $filtre = "banAvert";
-                    } else if ((isset($_POST["ban-check"]) === false) && (isset($_POST["expu-check"]) === true) && (isset($_POST["avert-check"]) === true)){
-                        $filtre = "expuAvert";
-                    } 
-                } else if (isset($_GET["filtre"])) {
-                    $filtre = $_GET["filtre"];
+                if (isset($_SESSION["access_token"]) && $_SESSION["moderation"] === true) {
+                    modMenu();
                 } else {
-                    $filtre = "all";    
+                    header('Location: index.php?action=accueil');
                 }
+                break;
 
-                displayLastestSanctions($tri, $filtre, $page, $recherche, $valBan, $valExpu, $valAvert);
+            default:
+                header('Location: index.php?action=accueil');
                 break;
         }
     } else {

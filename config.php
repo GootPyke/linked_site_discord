@@ -15,6 +15,8 @@
         'CDN_AVATAR_REFERENCE'  => $valeursUtilisees['CDN_REFERENCE'] . 'avatars/',
 
         'ID_MODERATION'         => '941440986595336202',
+        'NB_MEMBRES_AFFICHAGE_MOD' => 10,
+        'INVITATION_SERVEUR' => 'https://discord.gg/eqyApuEGD5',
 
         'authorizeURL'          => 'https://discord.com/api/oauth2/authorize',
         'tokenURL'              => 'https://discord.com/api/oauth2/token',

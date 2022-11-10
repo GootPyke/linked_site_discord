@@ -6,7 +6,10 @@
 <div id='div-generale-m'>
     <div id='gestion'>
         <div id="tri">
-            <form action="index.php?action=moderation&tri=<?= $tri ?>&page=1" method="post">
+            <?php 
+            if ($utilisateursFinaux !== false) {
+            ?>
+                <form action="index.php?action=moderation&menu=membres&recherche=<?= $termeDeRecherche ?>&page=1" method="post">
                     <p>Tri :</p>
     
                     <select name="tri-sel" id="tri-sel" onChange="this.form.submit()">
@@ -45,59 +48,96 @@
                         >Discriminateur décroissant</option>
                     </select>
                 </form>
+        <?php 
+            }
+        ?>
         </div>
     
         <!-- pagination -->
         <div id='pages'>
             <?php 
-            echo "<a href='index.php?action=moderation&tri=" . $tri ."&page=". $page-1 . "'><img src='src/images/fle_gauche.svg' alt='flèche gauche'></a>";
+            if (($utilisateursFinaux !== false) && ($page != 1)) {
+                echo "<a href='index.php?action=moderation&menu=membres&recherche=" . $termeDeRecherche . "&tri=" . $tri ."&page=". $page-1 . "'><img src='src/images/fle_gauche.svg' alt='flèche gauche'></a>";
+            }
             
             echo"<p id='infoPage'>Page " . $page . " sur " . $nbPages ."</p>";
     
-            echo "<a href='index.php?action=moderation&tri=" . $tri . "&page=" . $page+1 . "'><img src='src/images/fle_droite.svg' alt='flèche droite'></a>";
+            if (($utilisateursFinaux !== false) && ($page != $nbPages)) {
+                echo "<a href='index.php?action=moderation&menu=membres&recherche=" . $termeDeRecherche . "&tri=" . $tri . "&page=" . $page+1 . "'><img src='src/images/fle_droite.svg' alt='flèche droite'></a>";
+            }
             ?>
+        </div>
+
+        <div id='recherche'>
+            <form action="index.php?action=moderation&menu=membres&tri=<?= $tri ?>&page=1" method='post'>
+                <label for="recherche">Recherche :</label>
+                <div id='hs-rech'>
+                    <div id='hs-r-1'>
+                        <a href='index.php?action=moderation&menu=membres'><img src="src/images/croix.svg" alt="effacer"></a>
+                    </div>
+                    <input type="text" name="recherche" id="recherche" placeholder="<?= $termeDeRecherche ?>">
+                    <div id='hs-r-2'>
+                        <button type="submit"><img src="src/images/recherche_loupe.svg" alt="loupe"></button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
     <div class='membres'>
-        <?php 
-            foreach ($realMembers as $realMember) {
-        ?>
-                <div class="membre">
-                    <?php 
-                    $img = CDN_AVATAR_REFERENCE . $realMember->user->id . '/' . $realMember->user->avatar . '.png';
-            
-                    if (strpos($img, 'a_')) {
-                        $img = CDN_AVATAR_REFERENCE . $realMember->user->id . '/' . $realMember->user->avatar . '.gif';
+        <div>
+
+            <?php 
+                if (is_array($utilisateursAAfficher) === true) {
+                    foreach ($utilisateursAAfficher as $utilisateurAAfficher) {
+            ?>
+                        <div class="membre">
+                            <?php 
+                            $img = CDN_AVATAR_REFERENCE . $utilisateurAAfficher->user->id . '/' . $utilisateurAAfficher->user->avatar . '.png';
+                    
+                            if (strpos($img, 'a_')) {
+                                $img = CDN_AVATAR_REFERENCE . $utilisateurAAfficher->user->id . '/' . $utilisateurAAfficher->user->avatar . '.gif';
+                            }
+                            ?>
+                            <div class='div-img'>
+                            <?php 
+                            echo '<p><img src="'. $img .'" alt=""></p>';
+                            ?>
+                            </div>
+
+                            <div class="div-username">
+                            <?php 
+                            echo '<h1>'. $utilisateurAAfficher->user->username.'<p>#'. $utilisateurAAfficher->user->discriminator .'</p></h1>';
+                            ?>
+                            </div>
+
+                            <div id="act-sanc">
+                                <div class="div-avert">
+                                <?php 
+                                echo "<a class='avertir' href=''>Avertir</a>";
+                                ?>
+                                </div>
+
+                                <div class="div-expu">
+                                <?php
+                                echo '<a class="expulser" href="index.php?action=moderation&menu=sanction&sanction=expulser&id='. $utilisateurAAfficher->user->id .'">Expulser</a>';
+                                ?>
+                                </div>
+        
+                                <div class="div-ban">
+                                <?php 
+                                echo '<a class="bannir" href="index.php?action=moderation&menu=sanction&sanction=bannir&id='. $utilisateurAAfficher->user->id .'">Bannir</a>';
+                                ?>
+                                </div>
+                            </div>
+                        </div>    
+            <?php
                     }
-                    ?>
-                    <div class='div-img'>
-                    <?php 
-                    echo '<p><img src="'. $img .'" alt=""></p>';
-                    ?>
-                    </div>
-
-                    <div class="div-username">
-                    <?php 
-                    echo '<h1>'. $realMember->user->username.'<p>#'. $realMember->user->discriminator .'</p></h1>';
-                    ?>
-                    </div>
-
-                    <div class="div-expu">
-                    <?php
-                    echo '<a class="expulser" href="index.php?action=sanction&sanction=expulser&id='. $realMember->user->id .'">Expulser</a>';
-                    ?>
-                    </div>
-
-                    <div class="div-ban">
-                    <?php 
-                    echo '<a class="bannir" href="index.php?action=sanction&sanction=bannir&id='. $realMember->user->id .'">Bannir</a>';
-                    ?>
-                    </div>
-                </div>
-        <?php
-            }
-        ?>  
+                } else {
+                    echo "<p id='noResult'>" . $utilisateursAAfficher . "</p>";
+                }
+            ?>  
+        </div>
     </div>
 </div>
 

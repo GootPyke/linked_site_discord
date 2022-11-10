@@ -1,5 +1,5 @@
 <?php 
-    $title = $nomAction;
+    $title = $nomAction . $pseudo . $discriminateur;
     ob_start();
 ?>
 
@@ -7,7 +7,7 @@
     <a href='index.php?action=moderation' class='retour'><img src="src/images/flechegauche.svg" alt="Flèche gauche"><p>Retour</p></a>
 
     <form action="<?= $lienActionForm ?>" method="post">
-        <h1><?= $nomAction ?></h1>
+        <h1><?= $nomAction . "<h2>" . $pseudo . "</h2>" . "<h3>" . $discriminateur . "</h3>" ?></h1>
 
         <div>
             <!-- <div>
@@ -15,7 +15,7 @@
             </div> -->
             <div id='div-raison'>
                 <label for="raison">RAISON</label>
-                <textarea name="raison" id="raison" cols="30" rows="5"></textarea>
+                <textarea name="raison" id="raison" cols="30" rows="5" required></textarea>
             </div>
         </div>
 

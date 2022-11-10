@@ -1,10 +1,10 @@
 <?php 
-    require_once 'src/model/actualitesModel.php';
-    require_once 'src/controller/moderationController.php';
+    require_once SITE_ROOT . '/src/model/actualites/actualitesModel.php';
+    require_once SITE_ROOT . '/src/controller/moderation/moderationController.php';
     
     function showActualites(){
         $actualites = getAllActualites();
-        $estAdmin = verificationAdmin();
+        $estAdmin = $_SESSION["administrateur"];
 
         require_once 'src/view/actualites/actualitesView.php';
     }
